@@ -29,13 +29,20 @@ export const StudentLayout = () => {
   const {
     state: { tokenUser },
   } = useContext(AppContext);
+  console.log(
+    "🚀 ~ file: DashboardLayout.tsx:31 ~ StudentLayout ~ tokenUser:",
+    tokenUser
+  );
 
   useEffect(() => {
     let fetched = false;
-        const fetchUser = async () => {
+    const fetchUser = async () => {
       const res = await httpPrivate.get("students/my-profile");
       const data = await res.data;
-      console.log("🚀 ~ file: DashboardLayout.tsx:36 ~ fetchUser ~ data:", data)
+      console.log(
+        "🚀 ~ file: DashboardLayout.tsx:42 ~ fetchUser ~ data:",
+        data
+      );
     };
 
     !fetched && fetchUser();
@@ -149,6 +156,43 @@ export const StudentLayout = () => {
 export const InstructorLayout = () => {
   return (
     <>
+      <Navbar
+        fluid
+        rounded
+        className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
+      >
+        <Navbar.Brand className="flex-[1.9]">
+          <div className="tablet:hidden px-2">
+            <Navbar.Toggle />
+          </div>
+          <Link to="/">
+            <LogoComponent />
+          </Link>
+        </Navbar.Brand>
+        <div className="p-2 md:pr-4">
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                rounded
+                bordered
+                // placeholderInitials={tokenUser.email.slice(0, 2).toUpperCase()}
+                status="online"
+              />
+            }
+          >
+            <Link to="my-profile">
+              <Dropdown.Item>
+                <div className="px-4">Profile</div>
+              </Dropdown.Item>
+            </Link>
+            <Dropdown.Item href="/login">
+              <div className="px-4">Logout</div>
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
+      </Navbar>
       <main>
         <Outlet />
       </main>
@@ -159,7 +203,44 @@ export const InstructorLayout = () => {
 export const AdminLayout = () => {
   return (
     <>
-      <main>
+      <Navbar
+        fluid
+        rounded
+        className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
+      >
+        <Navbar.Brand className="flex-[1.9]">
+          <div className="tablet:hidden px-2">
+            <Navbar.Toggle />
+          </div>
+          <Link to="/">
+            <LogoComponent />
+          </Link>
+        </Navbar.Brand>
+        <div className="p-2 md:pr-4">
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                rounded
+                bordered
+                // placeholderInitials={tokenUser.email.slice(0, 2).toUpperCase()}
+                status="online"
+              />
+            }
+          >
+            <Link to="my-profile">
+              <Dropdown.Item>
+                <div className="px-4">Profile</div>
+              </Dropdown.Item>
+            </Link>
+            <Dropdown.Item href="/login">
+              <div className="px-4">Logout</div>
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
+      </Navbar>
+      <main className="min-h-screen p-4 relative mt-16 dark:bg-gray-900">
         <Outlet />
       </main>
     </>

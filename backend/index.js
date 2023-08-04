@@ -16,40 +16,39 @@ const logger = require("./src/utils/logger");
 const cors = require("cors");
 
 //starting point
-(async () => {
-  // console.clear();
-  const app = express();
-  const PORT = process.env.PORT || 6986;
-  await dbConnect(process.env.MONGO_URL);
-  /*--------------------------------Middlewares--------------------------*/
 
-  //morgan
-  app.use(morgan("dev"));
-  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+// console.clear();
+const app = express();
+const PORT = process.env.PORT || 6986;
+dbConnect(process.env.MONGO_URL);
+/*--------------------------------Middlewares--------------------------*/
 
-  //express as a middleware
-  app.use(express.json());
-  app.use(express.static(path.join(__dirname, "assets")));
-  app.use(cookieParser());
+//morgan
+app.use(morgan("dev"));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
-  // //
-  /* -------------------routes------------------------ */
-  app.get("/", (_, res) => {
-    res
-      .status(200)
-      .send("<h2>Welcome to Computer Science Departmental Portal!!!</h2>");
-  });
+//express as a middleware
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "assets")));
+app.use(cookieParser());
 
-  app.use("/api/v1", require("./src/routes/routes"));
-  app.use(four_oh_four);
-  app.use(errorHandlerMiddleware);
+// //
+/* -------------------routes------------------------ */
+app.get("/", (_, res) => {
+  res
+    .status(200)
+    .send("<h2>Welcome to Computer Science Departmental Portal!!!</h2>");
+});
 
-  const server = createServer(app);
-  // server up
-  server.listen(
-    PORT,
-    logger.info(
-      `Server has started, and is running in ${process.env.NODE_ENV} on http://localhost:${PORT}`
-    )
-  );
-})();
+app.use("/api/v1", require("./src/routes/routes"));
+app.use(four_oh_four);
+app.use(errorHandlerMiddleware);
+
+const server = createServer(app);
+// server up
+server.listen(
+  PORT,
+  logger.info(
+    `Server has started, and is running in ${process.env.NODE_ENV} on http://localhost:${PORT}`
+  )
+);

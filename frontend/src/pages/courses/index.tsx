@@ -1,4 +1,5 @@
 import { Button, Sidebar } from "flowbite-react";
+
 import { BreadcrumbComponents } from "../../components";
 import CoursesList from "./CoursesList";
 
@@ -42,7 +43,7 @@ export default function CoursePage() {
             </Sidebar.Items>
           </Sidebar>
           <div className="p-6 w-full">
-            <CoursesList courses={Array(18).fill({ name: "Course 1" })} />
+            <CoursesList />
           </div>
         </div>
       </main>

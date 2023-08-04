@@ -1,22 +1,23 @@
-import { useContext } from "react";
 import {
-  // Alert,
   Button,
   Card,
+  Checkbox,
   Label,
   Spinner,
   TextInput,
 } from "flowbite-react";
-import LogoComponent from "../../components/LogoComponent";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { httpPrivate } from "../../api/https";
-import { Types } from "../../api/reducer";
 import { CustomError, ILoginResponse } from "../../api/@types";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { AppContext } from "../../api/context";
-import { useMutation } from "react-query";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LogoComponent from "../../components/LogoComponent";
+import { Types } from "../../api/reducer";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { httpPrivate } from "../../api/https";
+import { useContext } from "react";
+import { useMutation } from "react-query";
 
 interface IFormInput {
   email: string;
@@ -49,7 +50,7 @@ function LoginPage() {
     "login",
     async (formData: IFormInput) => {
       const response = await httpPrivate.post<ILoginResponse>(
-        "http://localhost:6986/api/v1/login",
+        "/login",
         formData,
         { withCredentials: true }
       );
@@ -122,23 +123,12 @@ function LoginPage() {
           </div>
         ))}
         <div className="flex items-center gap-2">
+          <Checkbox id="showPass" />
           <Label
-            onClick={() =>
-              dispatch({
-                type: Types.open,
-                payload: {
-                  show: true,
-                  header: "Reset password",
-                  content: "Reset Password",
-                  buttonOK: "OK",
-                  type: "Error",
-                },
-              })
-            }
-            htmlFor="forget password"
-            className="cursor-pointer text-xs my-3 pl-2 hover:text-primary"
+            htmlFor="showPass"
+            className="cursor-pointer text-xs my-3 pl-2"
           >
-            forget password?
+            Show password
           </Label>
         </div>
         <Button

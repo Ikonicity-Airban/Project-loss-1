@@ -1,10 +1,13 @@
 import { Button, Card, Label, TextInput } from "flowbite-react";
-import { ICourse } from "../../api/@types";
-import { useContext } from "react";
+
 import { AppContext } from "../../api/context";
-import { Types } from "../../api/reducer";
-import { useMutation } from "react-query";
 import { Form } from "react-hook-form";
+import { ICourse } from "../../api/@types";
+import { Types } from "../../api/reducer";
+import { useContext } from "react";
+
+// import { useMutation } from "react-query";
+
 interface ICoursesProps {
   course: ICourse;
 }
@@ -22,13 +25,14 @@ export const RegisterCourseForm = ({ courses }: { courses: ICourse }) => {
   );
 };
 
-export default function CoursesComponent({ course }: ICoursesProps) {
+export default function CoursesComponent({ course = {} }: ICoursesProps) {
   const { dispatch } = useContext(AppContext);
 
-  const { mutate } = useMutation("course", {});
+  // const { mutate } = useMutation("course", {});
   const handleRegister = () => {
     console.log("hello");
   };
+
   const handleClick = () => {
     dispatch({
       type: Types.open,
@@ -36,7 +40,7 @@ export default function CoursesComponent({ course }: ICoursesProps) {
         show: true,
         header: "Register course",
         type: "Success",
-        content: "",
+        content: <RegisterCourseForm courses={course} />,
         buttonOK: "Register",
         onOk: handleRegister,
       },
@@ -62,7 +66,7 @@ export default function CoursesComponent({ course }: ICoursesProps) {
             className="w-full"
             onClick={handleClick}
           >
-            View More
+            Register Course
           </Button>
         </div>
       </Card>

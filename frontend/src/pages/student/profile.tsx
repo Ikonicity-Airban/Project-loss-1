@@ -1,5 +1,3 @@
-import React from "react";
-
 function StudentProfilePage() {
   return <div>ProfilePage</div>;
 }

@@ -1,8 +1,10 @@
-import React from "react";
-import { AppContext } from "./api/context";
 import "./App.css";
-import { Outlet } from "react-router-dom";
+
 import { Button, Modal } from "flowbite-react";
+
+import { AppContext } from "./api/context";
+import { Outlet } from "react-router-dom";
+import React from "react";
 import { Types } from "./api/reducer";
 
 function App() {
@@ -41,7 +43,7 @@ function App() {
               : ""
           }`}
         >
-          <p className="text-sm text-center p-4">{modal.content}</p>
+          <span className="text-sm text-center p-4">{modal.content}</span>
         </Modal.Body>
         <Modal.Footer className="justify-end">
           <Button

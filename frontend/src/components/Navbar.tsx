@@ -38,7 +38,7 @@ export default function NavbarComponent() {
       rounded
       className="z-[50] shadow bg-[#fff5] backdrop-blur-lg sticky top-0 w-full"
     >
-      <Navbar.Brand className="flex-[2.1]">
+      <div className="flex-[2.1]">
         <div className="md:hidden px-2">
           <Navbar.Toggle />
         </div>
@@ -46,7 +46,7 @@ export default function NavbarComponent() {
         <Link to="/">
           <LogoComponent />
         </Link>
-      </Navbar.Brand>
+      </div>
       <div className=" hidden md:order-1 sm:mx-0 mobile:flex tablet:justify-end tablet:flex-[2]">
         <Button
           className="px-4 bg-primary shadow-md text-white"

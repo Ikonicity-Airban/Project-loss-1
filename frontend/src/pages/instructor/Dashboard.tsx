@@ -51,7 +51,7 @@ const assignmentColumns = [
   { name: "Action", defaultWidth: 100, header: "Action" },
 ];
 
-function StudentDashboard() {
+function InstructorDashboard() {
   const { data, isLoading } = useQuery("course", getCourse, {
     cacheTime: 3600,
   });
@@ -65,21 +65,21 @@ function StudentDashboard() {
         id: "1",
         title: "Mathematics",
         course: "MTH222",
-        progress: Math.floor(Math.random() * 80 + 20),
+        progress: Math.floor(Math.random() * 100) + 20,
         className: "bg-gradient-to-r from-cyan-800 to-indigo-600",
       },
       {
         id: "2",
         title: "English",
         course: "ELS288",
-        progress: Math.floor(Math.random() * 80 + 20),
+        progress: Math.floor(Math.random() * 100) + 20,
         className: "bg-gradient-to-tr from-cyan-700 to-green-600",
       },
       {
         id: "3",
         title: "Physics",
         course: "PHY256",
-        progress: Math.floor(Math.random() * 80 + 20),
+        progress: Math.floor(Math.random() * 100) + 20,
         className: "bg-gradient-to-br from-indigo-900 to-blue-600",
       },
       {
@@ -174,4 +174,4 @@ function StudentDashboard() {
   );
 }
 
-export default StudentDashboard;
+export default InstructorDashboard;

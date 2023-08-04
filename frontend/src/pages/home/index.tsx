@@ -50,11 +50,11 @@ export default function HomeComponent(/* {}: Props */) {
               Computer Science Air Force Base Portal
             </h2>
             <a
-              href="#courses"
+              href="/login"
               className="mx-auto flex items-center justify-center text-white"
             >
               <Button gradientDuoTone={"greenToBlue"} className="text-white">
-                Browse Course{" "}
+                Go to Login
                 <FontAwesomeIcon icon={faArrowRightLong} className="mx-3" />
               </Button>
             </a>

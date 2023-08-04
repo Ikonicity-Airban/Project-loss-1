@@ -1,8 +1,8 @@
-import { useQuery } from "react-query";
 import CoursesComponent from "./CoursesComponent";
 import { ICourse } from "../../api/@types";
-import { getCourse } from "../../api/resource/course";
 import { Spinner } from "flowbite-react";
+import { getCourse } from "../../api/resource/course";
+import { useQuery } from "react-query";
 
 export default function CoursesList() {
   const { data, isLoading } = useQuery<

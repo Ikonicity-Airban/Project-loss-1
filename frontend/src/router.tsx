@@ -1,11 +1,18 @@
-import { AdminLayout, StudentLayout } from "./layouts/DashboardLayout";
-import { CoursePage, HomePage } from "./components";
+import {
+  AdminLayout,
+  InstructorLayout,
+  StudentLayout,
+} from "./layouts/DashboardLayout";
 import { LoginLayout, SignUpLayout } from "./layouts/AuthLayout";
 
 import AboutPage from "./about";
 import App from "./App";
 import AssignmentPage from "./pages/student/assignment";
 import ContactPage from "./contact";
+import { HomePage } from "./components";
+import InstructorAssignmentPage from "./pages/instructor/assignment";
+import InstructorCoursesPage from "./pages/instructor/courses";
+import InstructorDashboard from "./pages/instructor/Dashboard";
 import MainLayout from "./layouts/MainLayout";
 import NewsPage from "./pages/news";
 import ResultPage from "./pages/student/result";
@@ -94,20 +101,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/instructor",
-        element: <StudentLayout />,
+        element: <InstructorLayout />,
         errorElement: <div>Error</div>,
         children: [
           {
             path: "dashboard",
-            element: <StudentDashboard />,
+            element: <InstructorDashboard />,
           },
           {
             path: "courses",
-            element: <CoursePage />,
+            element: <InstructorCoursesPage />,
           },
           {
             path: "assignments",
-            element: <AssignmentPage />,
+            element: <InstructorAssignmentPage />,
           },
         ],
       },
