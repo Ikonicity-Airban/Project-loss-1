@@ -23,8 +23,6 @@ export default {
       fontFamily: {
         sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
         display: ["var(--font-calsans)"],
-        robo: ["var(--font-robtronika)"],
-        sup: ["var(--font-sup)"],
       },
       backgroundImage: {
         "gradient-radial":

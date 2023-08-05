@@ -1,7 +1,8 @@
 export default function LogoComponent() {
   return (
-    <span className="font-robo font-sm logo-clipped p-0 pl-4 whitespace-nowrap ">
-      Computronix
+    <span className="h-10 w-10 flex items-center">
+      <img src="logo.png" alt="logo" className="w-full h-full" />
+      <span className="logo-clipped text-xl  font-semibold">CSDP</span>
     </span>
   );
 }

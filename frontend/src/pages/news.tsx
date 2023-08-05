@@ -1,9 +1,10 @@
 import Section from "../components/Section";
+import NewsSection from "./home/NewsSection";
 
 function NewsPage() {
   return (
     <Section subtitle="Latest News">
-      <div className="text-center">NewsPage</div>
+      <NewsSection />
     </Section>
   );
 }

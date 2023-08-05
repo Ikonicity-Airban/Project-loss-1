@@ -24,7 +24,7 @@ const navLinks = [
 
 export default function NavbarComponent() {
   const activeLink: NavLinkProps["className"] = ({ isActive, isPending }) =>
-    `text-sm lg:px-2 py-1 mx-auto md:mx-0 font-bold order-1 ${
+    `text-sm lg:px-2 py-1 mx-auto md:mx-0 font-semibold order-1 ${
       isPending
         ? "text-gray-700"
         : isActive
@@ -36,9 +36,9 @@ export default function NavbarComponent() {
     <Navbar
       fluid
       rounded
-      className="z-[50] shadow bg-[#fff5] backdrop-blur-lg sticky top-0 w-full"
+      className="z-[50] shadow bg-[#fff9] backdrop-blur-lg sticky top-0 w-full"
     >
-      <div className="flex-[2.1]">
+      <div className="flex-[2.1] flex items-center space-x-4">
         <div className="md:hidden px-2">
           <Navbar.Toggle />
         </div>
@@ -50,6 +50,7 @@ export default function NavbarComponent() {
       <div className=" hidden md:order-1 sm:mx-0 mobile:flex tablet:justify-end tablet:flex-[2]">
         <Button
           className="px-4 bg-primary shadow-md text-white"
+          size="sm"
           gradientDuoTone={"greenToBlue"}
         >
           <Link to="/login" className="hover:text-white">
@@ -60,7 +61,8 @@ export default function NavbarComponent() {
       <Navbar.Collapse className="">
         <div className="order-2 mx-auto mobile:hidden">
           <Button
-            className="px-4 bg-primary shadow-md text-white"
+            size="sm"
+            className="px-4 bg-primary shadow-md my-6 text-white"
             gradientDuoTone={"greenToBlue"}
           >
             <Link to="/login" className="hover:text-white">

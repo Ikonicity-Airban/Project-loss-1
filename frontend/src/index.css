@@ -6,20 +6,14 @@
   font-family: "Montserrat";
   src: url("Montserrat-Medium.ttf");
 }
-@font-face {
-  font-family: "Robtronika";
-  src: url("Robtronika.ttf");
-}
-@font-face {
-  font-family: "Superbrigade";
-  src: url("Superbrigade.ttf");
-}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5rem;
   font-family: "Montserrat", Verdana, Geneva, Tahoma, sans-serif;
 }
 
@@ -68,7 +62,7 @@ p {
 }
 
 :root {
-  --font-robtronika: "Robtronika", sans-serif;
+  --font-arial: Arial, san-serif;
   --font-sup: "Superbrigade", sans-serif;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

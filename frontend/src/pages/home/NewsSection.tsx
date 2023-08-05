@@ -1,5 +1,5 @@
 import { Card } from "flowbite-react";
-// import {Section} from "../../components"
+import Section from "../../components/Section";
 
 const NewsSection = () => {
   return (
