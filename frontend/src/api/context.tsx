@@ -11,9 +11,9 @@ const initialState = {
   },
   signUpInfo: {},
   modal: {
-    show: false,
-    header: "",
-    content: "",
+    show: true,
+    header: "Header",
+    content: <></>,
     onOk: () => undefined,
     buttonOK: "OK",
     type: "Success",

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   Button,
   Card,
@@ -7,19 +6,24 @@ import {
   Spinner,
   TextInput,
 } from "flowbite-react";
-import LogoComponent from "../../components/LogoComponent";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
-import { httpPrivate } from "../../api/https";
 import { CustomError, ILoginResponse } from "../../api/@types";
+import {
+  FaCheckCircle,
+  FaEnvelope,
+  FaExclamationCircle,
+  FaKey,
+  FaLock,
+  FaUser,
+} from "react-icons/fa";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import { AppContext } from "../../api/context";
 import { Types } from "../../api/reducer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleCheck,
-  faCircleExclamation,
-} from "@fortawesome/free-solid-svg-icons";
+import { httpPrivate } from "../../api/https";
+import { useContext } from "react";
+import { useMutation } from "react-query";
+import { useState } from "react";
 
 interface IFormInput {
   firstName: string;
@@ -29,50 +33,47 @@ interface IFormInput {
   confirmPassword: string;
 }
 
-type field =
-  | "firstName"
-  | "lastName"
-  | "password"
-  | "confirmPassword"
-  | "email";
-
 const formFields = [
   {
     name: "firstName",
     label: "First Name",
-    icon: "",
+    icon: <FaUser />,
   },
   {
     name: "lastName",
     label: "Last Name",
-    icon: "",
+    icon: <FaUser />,
   },
   {
     name: "email",
     label: "Email",
-    icon: "",
+    icon: <FaEnvelope />,
   },
   {
     name: "password",
     label: "Password",
-    icon: "",
+    icon: <FaKey />,
   },
   {
     name: "confirmPassword",
     label: "Confirm Password",
-    icon: "",
     type: "password",
+    icon: <FaLock />,
   },
 ];
 
 function SignUpPage() {
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
+  const [showPass, setShowPass] = useState(false);
+
+  const { register, handleSubmit, reset } = useForm<IFormInput>();
+
   const { mutate, isLoading } = useMutation(
-    "login",
+    ["login"],
     async (formData: IFormInput) => {
       const response = await httpPrivate.post<ILoginResponse>(
-        `http://localhost:6986/api/v1/create-account/${currentUser}`,
+        `create-account/${currentUser}`,
         formData,
         { withCredentials: true }
       );
@@ -93,16 +94,14 @@ function SignUpPage() {
             header: "Success",
             content: (
               <div>
-                <FontAwesomeIcon
-                  icon={faCircleCheck}
-                  size="5x"
-                ></FontAwesomeIcon>
+                <FaCheckCircle />
               </div>
             ),
             buttonOK: "OK",
             type: "Success",
           },
         });
+        reset();
       },
 
       onError: (error: CustomError) => {
@@ -113,10 +112,7 @@ function SignUpPage() {
             header: "Success",
             content: (
               <div>
-                <FontAwesomeIcon
-                  icon={faCircleExclamation}
-                  size="5x"
-                ></FontAwesomeIcon>
+                <FaExclamationCircle className="text-7xl" />
                 <p>{error.response.data.msg}</p>
               </div>
             ),
@@ -128,8 +124,6 @@ function SignUpPage() {
     }
   );
 
-  const { register, handleSubmit } = useForm<IFormInput>();
-
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     mutate(data);
   };
@@ -138,35 +132,42 @@ function SignUpPage() {
   const currentUser = pathname.split("/")[2];
   //return
   return (
-    <Card className="min-w-[315px] w-full md:max-w-md">
-      <div className="mx-auto">
-        <LogoComponent />
-      </div>
+    <Card className="min-w-[315px] w-full mobile:max-w-md">
       <span className="flex place-content-center">
-        <h3 className="logo-clipped max-w-md my-6 font-semibold">
-          Create an Account
+        <h3 className="logo-clipped text-center max-w-md my-6 font-semibold">
+          Create an Account as a {currentUser}
         </h3>
       </span>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 capitalize">
-        {formFields.map(({ name, label, type }) => (
-          <div key={name}>
+        {formFields.map(({ name, label, icon, type }) => (
+          <div key={name} className="relative">
             <div className="mb-2 block ">
               <Label htmlFor={name}>{label}</Label>
             </div>
+            <span className="absolute z-10 right-4 bottom-[20%] text-gray-500">
+              {icon}
+            </span>
             <TextInput
+              required
               className="placeholder-shown:capitalize"
-              type={type || name || "text"}
-              id={"firstName"}
-              placeholder={`${currentUser} ${label}`}
-              {...register(name as field)}
+              type={showPass ? "text" : type || name}
+              id={name}
+              {...register(name as keyof IFormInput)}
             />
           </div>
         ))}
 
         <div className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Label htmlFor="remember" className="cursor-pointer">
-            Remember me
+          <Checkbox
+            id="showPass"
+            className="focus:ring-primary"
+            onChange={(e) => setShowPass(e.target.checked)}
+          />
+          <Label
+            htmlFor="showPass"
+            className="cursor-pointer text-xs my-3 pl-2"
+          >
+            Show password
           </Label>
         </div>
         <Button

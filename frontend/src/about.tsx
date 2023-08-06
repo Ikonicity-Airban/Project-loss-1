@@ -1,13 +1,17 @@
+import { BreadcrumbComponents } from "./components";
+import FacultySection from "./pages/home/FacultySection";
+import Heading from "./components/Heading";
 import React from "react";
 import Section from "./components/Section";
-import Heading from "./components/Heading";
-import { BreadcrumbComponents } from "./components";
 
 const AboutPage: React.FC = () => {
   return (
     <div className="max-w-screen-laptop mx-auto">
       <BreadcrumbComponents />
-      <Heading section_title="About us" />
+      <Heading section_title="About us" heading="Get to know us better" />
+      <div className="w-full">
+        <img src="carousel/4.jpg" className="w-full" />
+      </div>
       <Section subtitle="Mission and Vision">
         <h2></h2>
         <p>
@@ -55,7 +59,7 @@ const AboutPage: React.FC = () => {
           </ul>
         </p>
       </Section>
-
+      <FacultySection></FacultySection>
       <Section>
         <h2>Academic Programs</h2>
         <p>

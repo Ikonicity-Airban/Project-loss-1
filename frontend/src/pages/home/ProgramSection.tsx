@@ -1,6 +1,6 @@
+import { Card } from "flowbite-react";
 import React from "react";
 import Section from "../../components/Section";
-import { Card } from "flowbite-react";
 
 const ProgramsSection: React.FC = () => {
   const programs = [
@@ -34,11 +34,13 @@ const ProgramsSection: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {programs.map((program, index) => (
-            <Card key={index}>
-              <h3 className="text-lg font-bold mb-4 logo-clipped">
-                {program.title}
-              </h3>
-              <p className="text-base leading-loose">{program.description}</p>
+            <Card key={index} className="animate-fade-in justify-between">
+              <div className="flex flex-col justify-between">
+                <h4 className="text-center font-bold mb-4 logo-clipped">
+                  {program.title}
+                </h4>
+                <p className="text-base leading-loose">{program.description}</p>
+              </div>
             </Card>
           ))}
         </div>

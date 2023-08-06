@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const BASE_URL = "http://localhost:6986/api/v1";
 
 export default axios.create({
@@ -12,5 +13,6 @@ export const httpPrivate = axios.create({
   headers: { "Content-Type": "application/json", Accept: "application/json" },
   withCredentials: true,
   timeout: 3000,
+
   timeoutErrorMessage: "Retry, Your request is taking too long",
 });

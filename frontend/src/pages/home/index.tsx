@@ -1,13 +1,12 @@
 // type Props = {};
 
-import { Button, Carousel, ListGroup } from "flowbite-react";
+import { Button, Carousel } from "flowbite-react";
 
 import { BreadcrumbComponents } from "../../components";
+import { FaArrowRight } from "react-icons/fa";
 import FacultySection from "./FacultySection";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgramsSection from "./ProgramSection";
 import Section from "../../components/Section";
-import { faArrowRightLong } from "@fortawesome/free-solid-svg-icons";
 
 export default function HomeComponent() {
   return (
@@ -49,40 +48,25 @@ export default function HomeComponent() {
                 className="text-white"
               >
                 Go to Login
-                <FontAwesomeIcon icon={faArrowRightLong} className="mx-3" />
+                <FaArrowRight className="mx-3" />
               </Button>
             </a>
           </div>
         </div>
       </main>
-      <BreadcrumbComponents />
-      <div className="max-w-6xl mx-auto p-4">
-        <div className="flex flex-col md:flex-row">
-          <div className="flex-1 ">
-            <ListGroup>
-              <ListGroup.Item>
-                <h2 title="">Top links</h2>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <a href="#staffs">link 1</a>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <a href="#programs">link 2</a>
-              </ListGroup.Item>
-            </ListGroup>
-          </div>
-          <Section
-            title=""
-            subtitle="Welcome to the Academic Departmental Portal!"
-          >
-            <p className="text-base leading-loose">
-              We're glad you're here and hope you find our website to be a
-              valuable resource for all your academic needs. Our department is
-              dedicated to providing students with a comprehensive and engaging
-              education that prepares them for success in their chosen careers.
-            </p>
-          </Section>{" "}
-        </div>
+      <div className="max-w-screen-laptop mx-auto p-4">
+        <BreadcrumbComponents />
+        <Section
+          title=""
+          subtitle="Welcome to the Academic Departmental Portal!"
+        >
+          <p className="text-base leading-loose">
+            We're glad you're here and hope you find our website to be a
+            valuable resource for all your academic needs. Our department is
+            dedicated to providing students with a comprehensive and engaging
+            education that prepares them for success in their chosen careers.
+          </p>
+        </Section>{" "}
         <Section title="What We Offer?">
           <p className="text-base leading-loose">
             We offer a range of programs and courses that are designed to meet

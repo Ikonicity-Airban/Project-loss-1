@@ -8,24 +8,24 @@ const FacultySection: React.FC = () => {
       name: "John Doe",
       title: "Professor",
       area: "Artificial Intelligence",
-      image: "https://example.com/john-doe.jpg",
+      image: "images/1.jpg",
     },
     {
       name: "Jane Smith",
       title: "Associate Professor",
       area: "Data Science",
-      image: "https://example.com/jane-smith.jpg",
+      image: "images/2.jpg",
     },
     {
       name: "Michael Johnson",
       title: "Assistant Professor",
       area: "Software Engineering",
-      image: "https://example.com/michael-johnson.jpg",
+      image: "images/3.jpg",
     },
   ];
 
   return (
-    <Section subtitle="Our Department Colossus">
+    <Section subtitle="Our Department Colossuses">
       <div className="container mx-auto px-4">
         <p className="my-6">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
@@ -36,17 +36,16 @@ const FacultySection: React.FC = () => {
         <h2 className="text-2xl font-bold mb-4">Department Members</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {facultyMembers.map((faculty, index) => (
-            <Card key={index}>
-              <img
-                src={faculty.image}
-                alt={faculty.name}
-                className="w-full h-40 object-cover mb-4 rounded-md"
-              />
-              <h3 className="text-lg font-bold">{faculty.name}</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-2">
+            <Card
+              key={index}
+              imgSrc={faculty.image}
+              className="animate-fade-in"
+            >
+              <h3 className="font-bold logo-clipped">{faculty.name}</h3>
+              <p className="text-gray-600 text-sm dark:text-gray-400 mb-2">
                 {faculty.title}
               </p>
-              <p className="text-gray-700 dark:text-gray-300">{faculty.area}</p>
+              <p className="text-gray-700 dark:text-gray-200">{faculty.area}</p>
             </Card>
           ))}
         </div>

@@ -7,6 +7,7 @@ import {
   TextInput,
 } from "flowbite-react";
 import { CustomError, ILoginResponse } from "../../api/@types";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -18,28 +19,28 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { httpPrivate } from "../../api/https";
 import { useContext } from "react";
 import { useMutation } from "react-query";
+import { useState } from "react";
 
 interface IFormInput {
   email: string;
   password: string;
 }
 
-type field = "email" | "password";
-
 const formFields = [
   {
     name: "email",
     label: "Email",
-    icon: "",
+    icon: <FaEnvelope />,
   },
   {
     name: "password",
     label: "Password",
-    icon: "",
+    icon: <FaLock />,
   },
 ];
 function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
+  const [showPass, setShowPass] = useState(false);
 
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -88,6 +89,8 @@ function LoginPage() {
           },
         });
       },
+      retry: 3,
+      useErrorBoundary: true,
     }
   );
 
@@ -106,24 +109,31 @@ function LoginPage() {
       </span>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {formFields.map(({ name, label }) => (
-          <div key={name}>
+        {formFields.map(({ name, label, icon }) => (
+          <div key={name} className="relative">
             <div className="mb-2 block ">
               <Label htmlFor={name}>{label}</Label>
             </div>
+            <span className="absolute z-10 right-4 bottom-[20%] text-gray-500">
+              {icon}
+            </span>
             <TextInput
+              required
               disabled={isLoading}
-              className="placeholder:capitalize"
-              type={name}
+              className="placeholder:capitalize placeholder:mx-10"
+              type={showPass ? "text" : name}
               value={state?.email}
               id={name}
-              placeholder={label}
-              {...register(name as field)}
+              // placeholder={label}
+              {...register(name as keyof IFormInput)}
             />
           </div>
         ))}
         <div className="flex items-center gap-2">
-          <Checkbox id="showPass" />
+          <Checkbox
+            id="showPass"
+            onChange={(e) => setShowPass(e.target.checked)}
+          />
           <Label
             htmlFor="showPass"
             className="cursor-pointer text-xs my-3 pl-2"

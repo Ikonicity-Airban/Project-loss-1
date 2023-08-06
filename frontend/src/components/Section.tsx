@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import Heading from "./Heading";
+import { ReactNode } from "react";
 
 type Props = {
   title?: string;
@@ -11,7 +11,7 @@ type Props = {
 const Section = ({ children, subtitle, id, title, ...props }: Props) => {
   return (
     <section
-      className="p-2 md:p-6 flex w-full flex-col place-content-center gap-6 scroll-mt-10 laptop:my-10"
+      className="p-2 md:p-6 flex w-full flex-col place-content-center gap-6 scroll-mt-10 laptop:my-10 relative"
       aria-label={title}
       id={id}
       {...props}

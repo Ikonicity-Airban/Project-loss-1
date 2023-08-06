@@ -31,7 +31,7 @@ function App() {
   }
 
   return (
-    <section className="w-[100vw] dark:bg-slate-950 3xl:container mx-auto">
+    <section className="w-[99vw] dark:bg-slate-950 3xl:container mx-auto">
       <Modal size="md" show={modal?.show} dismissible onClose={closeModal}>
         <Modal.Header className="text-sm">{modal.header}</Modal.Header>
         <Modal.Body
