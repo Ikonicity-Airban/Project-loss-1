@@ -4,7 +4,12 @@ const Student = require("../models/student.model");
 const Instructor = require("../models/instructor.model");
 const { signTokens, verifyAccessToken } = require("../utils/jwt");
 const { createTokenUser } = require("../utils/users");
-const { BadRequestError, UnauthenticatedError } = require("../error");
+const {
+  BadRequestError,
+  UnauthenticatedError,
+  NotFoundError,
+} = require("../error");
+const Department = require("../models/department.model");
 
 ///////////////////////////////////////
 //?log in
@@ -18,17 +23,17 @@ async function Login(req, res) {
 
   const user = await User.findOne({ email });
   // console.log(user);
-  if (!user) return res.sendStatus(404);
+  if (!user) throw new BadRequestError("Invalid Email or password");
 
   if (!(await user.verifyPassword(password)))
     throw new BadRequestError("Invalid Email or password");
 
   const tokenUser = createTokenUser(user);
-  const { accessToken, refreshToken } = signTokens(res, tokenUser);
+
+  const { accessToken } = signTokens(res, tokenUser);
   res.status(StatusCodes.OK).json({
     tokenUser,
     accessToken,
-    refreshToken,
   });
 }
 
@@ -43,35 +48,31 @@ async function CreateAccount(req, res) {
   if (!email || !password)
     throw new BadRequestError("Email or Password fields cannot be blank");
 
-  let user = await User.findOne({ email });
-  if (user) throw new BadRequestError("User Already Exits");
+  let alreadyExists = await User.findOne({ email });
+  if (alreadyExists) throw new BadRequestError("User Already Exits");
 
   //creates the user
-  user = new User({ email, password });
+  const user = new User({ email, password });
+  const department = await Department.findOne({ name: "Computer Science" });
+  if (!department) throw new NotFoundError("No department found");
+  user.department = department._id;
 
   //create the kind of user expected
   let createdUser;
   if (basePath === "student") {
     user.role = "student";
-    createdUser = await Student.create({ user: user._id, ...req.body });
+    createdUser = await Student.create({ userId: user._id, ...req.body });
     createdUser.level = 100;
   } else if (basePath === "instructor") {
     user.role = "instructor";
     createdUser = await Instructor.create({ user: user._id, ...req.body });
   }
   user.save();
-
   createdUser.populate("user");
   //Token services
-  const { accessToken, refreshToken } = signTokens(res, createTokenUser(user));
 
   //successful response
-  res.status(200).json({
-    user,
-    createdUser,
-    accessToken,
-    refreshToken,
-  });
+  res.status(200).json({ user: createdUser });
 }
 
 //is authenticated

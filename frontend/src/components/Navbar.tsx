@@ -24,7 +24,7 @@ const navLinks = [
 
 export default function NavbarComponent() {
   const activeLink: NavLinkProps["className"] = ({ isActive, isPending }) =>
-    `text-sm lg:px-2 py-1 mx-auto md:mx-0 font-semibold order-1 ${
+    `text-base lg:px-2 py-1 mx-auto md:mx-0 font-medium order-1 ${
       isPending
         ? "text-gray-700"
         : isActive

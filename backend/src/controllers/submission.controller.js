@@ -1,14 +1,6 @@
-import Submission from "../models/submission.model";
-import renderPage from "../utils/renderer.helper";
 
-export async function getAllSubmittedAssignment(req, res) {
-  const submissions = Submission.find({});
+async function GetAllAssigments(req, res) {
 
-  if (!submissions) {
-  }
-}
 
-export async function getOneSubmittedAssignments(req, res) {
-  const { submissionId } = req.params;
-  res.status(200).json({ msg: submissionId });
+  res.status(200).json({})
 }

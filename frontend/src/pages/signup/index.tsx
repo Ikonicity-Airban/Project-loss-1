@@ -111,7 +111,7 @@ function SignUpPage() {
             show: true,
             header: "Success",
             content: (
-              <div>
+              <div className="flex p-6 items-center gap-6">
                 <FaExclamationCircle className="text-7xl" />
                 <p>{error.response.data.msg}</p>
               </div>

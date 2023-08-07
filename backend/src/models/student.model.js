@@ -5,7 +5,7 @@ const User = require("./user.model").default;
 
 const StudentSchema = new Schema(
   {
-    user: {
+    userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -19,11 +19,7 @@ const StudentSchema = new Schema(
       default: () => "NAF-".concat(randomUUID().split("-")[1]),
     },
     level: { type: Number, default: 100 },
-    department: {
-      type: Schema.Types.ObjectId,
-      ref: "Department",
-      require: true,
-    },
+
     coursesOffered: [{ type: Schema.Types.ObjectId, ref: "Course" }],
     sex: {
       type: String,
@@ -38,15 +34,10 @@ const StudentSchema = new Schema(
   }
 );
 
-StudentSchema.pre("save", async function () {
-  const department = await Department.findOne({ name: "Computer Science" });
-  if (!department) return;
-  this.department = department._id;
-});
-
 StudentSchema.pre("findOneAndRemove", async function (doc) {
   console.log(this._id, doc);
   const user = await User.findOneAndRemove(doc._id);
+  console.log("🚀 ~ file: student.model.js:46 ~ user:", user);
 });
 const Student = model("Student", StudentSchema);
 

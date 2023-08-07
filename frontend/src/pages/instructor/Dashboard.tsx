@@ -1,35 +1,34 @@
 import { AppContext } from "../../api/context";
-import { AxiosError } from "axios";
-import { IUser } from "../../api/@types";
 import { ListGroup } from "flowbite-react";
 import Section from "../../components/Section";
 import { Types } from "../../api/reducer";
-import { baseGet } from "../../api/base";
 import { useContext } from "react";
 import { useQuery } from "react-query";
-
+import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
+import { IInstructor } from "../../api/@types";
 // const defaultStyle: { [key: string]: string | number } = {
 //   maxWidth: "960px",
 // };
 
 function InstructorDashboard() {
+  const http = useAxiosPrivate();
   const { dispatch } = useContext(AppContext);
   const {
     data: userInfo,
     isLoading,
     isError,
-  } = useQuery<IUser>(
+  } = useQuery(
     "instructor",
-    async () => await baseGet("/instructors/my-profile"),
+    async () => await http.get<IInstructor>("/instructors/my-profile"),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         dispatch({
           type: Types.open,
           payload: {
             type: "Success",
             show: true,
             header: "Hello",
-            content: <>Welcome {data?.email}</>,
+            content: <>Welcome</>,
             buttonOK: "OK",
           },
         });

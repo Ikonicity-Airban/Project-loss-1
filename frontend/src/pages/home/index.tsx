@@ -1,5 +1,5 @@
 import { Button, Carousel } from "flowbite-react";
-
+import Helmet from "react-helmet";
 import { BreadcrumbComponents } from "../../components";
 import { FaArrowRight } from "react-icons/fa";
 import FacultySection from "./FacultySection";
@@ -9,6 +9,9 @@ import Section from "../../components/Section";
 export default function HomeComponent() {
   return (
     <main>
+      <Helmet>
+        <title>Home</title>
+      </Helmet>
       <main className="min-h-[60vh] md:min-h-[80vh] relative rounded-2xl overflow-hidden">
         <div className="relative inset-0 -z-1">
           <Carousel

@@ -1,10 +1,8 @@
 import { Card, Tooltip } from "flowbite-react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
-import { FaQuestionCircle } from "react-icons/fa";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaKey, FaQuestionCircle } from "react-icons/fa";
 import LoginPage from "../pages/login";
-import { faKey } from "@fortawesome/free-solid-svg-icons";
 
 export function LoginLayout() {
   return (
@@ -12,20 +10,24 @@ export function LoginLayout() {
       <div className="absolute left-[10%] -top-2 flex items-center gap-3">
         <FaQuestionCircle />
         <Tooltip
-          content=" Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero et
-            laudantium aut nobis facere reprehenderit. Ad, libero quas. Repellat
-            tempora commodi quia repudiandae impedit eveniet ipsam praesentium
-            obcaecati fuga corrupti."
+          trigger="hover"
+          content={
+            <>
+              <span>
+                This Login is for all users just fill in your credentials"
+              </span>
+            </>
+          }
           className="absolute min-w-[300px]"
         >
-          <a href="#">Help</a>
+          <span className="cursor">Help</span>
         </Tooltip>
-      </div>
+      </div>{" "}
       <LoginPage />
       <Card className="w-full max-w-sm">
         <h5 className="text-center space-y-4 ">Don't have an account?</h5>
         <div className="text-gray-600 dark:text-gray-400 flex mx-auto space-x-2">
-          <FontAwesomeIcon icon={faKey}></FontAwesomeIcon>
+          <FaKey />
           <Link
             to="/create-account/student"
             preventScrollReset={false}
@@ -87,7 +89,7 @@ export function SignUpLayout() {
       <Card className="w-full max-w-md">
         <h5 className="text-center space-y-4">Already have an account?</h5>
         <div className="text-gray-500 dark:text-gray-400 flex mx-auto space-x-2">
-          <FontAwesomeIcon icon={faKey}></FontAwesomeIcon>
+          <FaKey />
           <Link to="/login" className="logo-clipped">
             Login
           </Link>

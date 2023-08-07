@@ -2,12 +2,12 @@ import React, { useReducer, createContext, Dispatch } from "react";
 import { ModalActions, authActions, authReducer } from "./reducer";
 
 const initialState = {
-  tokenUser: {
+  user: {
     _id: "",
     email: "",
     role: "",
+    department: {},
     accessToken: "",
-    refreshToken: "",
   },
   signUpInfo: {},
   modal: {

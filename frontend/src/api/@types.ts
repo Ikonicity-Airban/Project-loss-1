@@ -1,77 +1,79 @@
 import { ReactNode } from "react";
 
-export interface IUser {
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  role: string;
+type dataResponse = {
   _id: string;
-  id?: string;
-  coursesOffered?: [];
   createdAt: string;
   updatedAt: string;
   __v: number;
-}
+};
 
-export interface GenericResponse {
+type IUser = {
+  email: string;
+  role: string;
+  id?: string;
+} & dataResponse;
+
+export type IStudent = {
+  firstName?: string;
+  lastName?: string;
+} & dataResponse &
+  IUser;
+
+export type GenericResponse = {
   status: string;
   message: string;
-}
+};
 
-export interface ILoginResponse {
-  refreshToken: string;
-  access_token: string;
+export type ILoginResponse = {
+  accessToken: string;
   tokenUser: IUser;
-}
+};
 
-export interface IUserResponse {
-  data: {
-    user: IUser;
-  };
-}
-
-export interface ICourse {
+export type ICourse = {
   title: string;
   code: string;
   description?: string;
   department?: IDepartment;
-}
+} & dataResponse;
 
-export interface IDepartment {
+export type IDepartment = {
   name: string;
   description?: string;
   headOfDepartment?: string;
   coursesOffered?: ICourse[];
   students?: string[];
   instructors?: string[];
-}
+} & dataResponse;
 
-export interface IAssignment {
+export type IAssignment = {
   title?: string;
   description?: string;
-  course?: ICourse;
-}
+  course: ICourse;
+} & dataResponse;
 
-export interface IInstructor {
+export type IInstructor = {
   user: IUser;
   name?: string;
   coursesTeaching?: ICourse[];
+  assignment: IAssignment[];
   department?: IDepartment;
-}
+} & dataResponse;
 
-export interface ISubmission {
+export type ISubmission = {
   student: string;
   assignment: string;
-  linkOrFile?: {
-    data: Buffer;
-    contentType: string;
-  };
-}
+  linkOrFile?:
+    | {
+        data: Buffer;
+        contentType: string;
+      }
+    | string;
+} & dataResponse;
 
-export interface CustomError {
+export type CustomError = {
   message: string;
   response: { data: { msg: string } };
-}
+};
 
 export type IModal = {
   type: "Success" | "Error";
