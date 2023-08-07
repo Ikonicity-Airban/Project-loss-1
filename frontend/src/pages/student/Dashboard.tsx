@@ -3,8 +3,11 @@ import { useContext, useMemo } from "react";
 
 import { AppContext } from "../../api/context";
 import Heading from "../../components/Heading";
+import { IUserResponse } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
+import { Types } from "../../api/reducer";
+import { baseGet } from "../../api/base";
 import { getCourse } from "../../api/resource/course";
 import { useQuery } from "react-query";
 
@@ -52,13 +55,40 @@ const assignmentColumns = [
 ];
 
 function StudentDashboard() {
-  const { data, isLoading } = useQuery("course", getCourse, {
+  const { data } = useQuery("course", getCourse, {
     cacheTime: 3600,
   });
   const {
     state: { tokenUser },
   } = useContext(AppContext);
+  const { dispatch } = useContext(AppContext);
+  const {
+    data: userInfo,
+    isLoading,
+    isError,
+  } = useQuery<IUserResponse>(
+    "instructor",
+    async () => await baseGet("/students/my-profile"),
+    {
+      onSuccess: (data) => {
+        dispatch({
+          type: Types.open,
+          payload: {
+            type: "Success",
+            show: true,
+            header: "Hello",
+            content: <>Welcome {data?.name}</>,
+            buttonOK: "OK",
+          },
+        });
+      },
+    }
+  );
 
+  console.log(
+    "🚀 ~ file: Dashboard.tsx:70 ~ StudentDashboard ~ userInfo:",
+    userInfo
+  );
   const cards = useMemo(
     () => [
       {
@@ -101,7 +131,7 @@ function StudentDashboard() {
           Welcome to your Portal Dashboard
         </h1>
         <h1 className="font-robo text-4xl border-l-2 font-thin logo-clipped border-indigo-300 pl-4">
-          {tokenUser.role || "Enoch"}
+          {userInfo?.username || "Enoch"}
         </h1>
       </div>
       <hr />

@@ -1,11 +1,13 @@
 import { ReactNode } from "react";
 
 export interface IUser {
-  name: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   role: string;
   _id: string;
-  id: string;
+  id?: string;
+  coursesOffered?: [];
   createdAt: string;
   updatedAt: string;
   __v: number;

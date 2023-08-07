@@ -1,4 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({
+  debug: process.env.NODE_ENV == "development",
+});
 require("express-async-errors");
 
 //http

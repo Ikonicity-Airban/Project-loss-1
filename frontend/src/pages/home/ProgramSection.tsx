@@ -34,8 +34,8 @@ const ProgramsSection: React.FC = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {programs.map((program, index) => (
-            <Card key={index} className="animate-fade-in justify-between">
-              <div className="flex flex-col justify-between">
+            <Card key={index} className="animate-fade-in">
+              <div className="flex flex-col h-full">
                 <h4 className="text-center font-bold mb-4 logo-clipped">
                   {program.title}
                 </h4>

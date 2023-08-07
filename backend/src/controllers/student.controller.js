@@ -16,12 +16,9 @@ async function GetAllStudents(req, res) {
 
 // Get students for a Student
 async function GetOneStudentStats(req, res) {
-  let { studentId } = req.params;
   const { role, userId } = res.locals.user;
-  if (!studentId) {
-    studentId = userId;
-  }
-  if (!(role == "admin" || role == "instructor" || studentId == userId))
+
+  if (!(role == "admin" || role == "instructor"))
     throw new UnauthenticatedError("You are not authorized");
 
   const student = await Student.findOne({ user: userId })

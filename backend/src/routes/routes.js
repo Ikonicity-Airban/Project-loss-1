@@ -14,6 +14,7 @@ mainRouter.use([deserializeUser, authenticateUser]);
 mainRouter.use("/courses", courseRoutes);
 mainRouter.use("/courses", instructorRoutes);
 mainRouter.use("/students", studentRoutes);
+mainRouter.use("/instructors", instructorRoutes);
 mainRouter.use("/department", departmentRoutes);
 mainRouter.use("/assignment", departmentRoutes);
 

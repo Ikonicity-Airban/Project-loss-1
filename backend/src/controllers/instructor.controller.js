@@ -28,6 +28,16 @@ async function GetOneInstructorStats(req, res) {
   res.status(StatusCodes.OK).json(instructor);
 }
 
+async function GetInstructorProfile(req, res) {
+  const { role, userId } = res.locals.user;
+  if (!(role == "admin" || role == "instructor"))
+    throw new UnauthenticatedError("You are not authorized");
+
+  const instructor = await Instructor.findById(userId).lean();
+  if (!instructor) throw new NotFoundError("instructor Not found");
+  res.status(StatusCodes.OK).json(instructor);
+}
+
 //update instructors
 async function UpdateOneInstructorInfo(req, res) {
   const { instructorId } = req.params;
@@ -57,6 +67,7 @@ async function DeleteOneInstructor(req, res) {
 module.exports = {
   GetAllInstructors,
   DeleteOneInstructor,
+  GetInstructorProfile,
   GetOneInstructorStats,
   UpdateOneInstructorInfo,
 };

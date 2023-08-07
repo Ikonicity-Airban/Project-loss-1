@@ -54,6 +54,7 @@ async function CreateAccount(req, res) {
   if (basePath === "student") {
     user.role = "student";
     createdUser = await Student.create({ user: user._id, ...req.body });
+    createdUser.level = 100;
   } else if (basePath === "instructor") {
     user.role = "instructor";
     createdUser = await Instructor.create({ user: user._id, ...req.body });

@@ -1,5 +1,3 @@
-// type Props = {};
-
 import { Button, Carousel } from "flowbite-react";
 
 import { BreadcrumbComponents } from "../../components";
