@@ -5,8 +5,12 @@ import { AppContext } from "../../api/context";
 import Heading from "../../components/Heading";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
+import { Types } from "../../api/reducer";
+import { baseGet } from "../../api/base";
 import { getCourse } from "../../api/resource/course";
 import { useQuery } from "react-query";
+import { IStudent } from "../../api/@types";
+import { Helmet } from "react-helmet";
 
 // const defaultStyle: { [key: string]: string | number } = {
 //   maxWidth: "960px",
@@ -52,12 +56,37 @@ const assignmentColumns = [
 ];
 
 function StudentDashboard() {
-  const { data, isLoading } = useQuery("course", getCourse, {
+  const { data } = useQuery("course", getCourse, {
     cacheTime: 3600,
   });
   const {
-    state: { tokenUser },
+    dispatch,
+    state: { user },
   } = useContext(AppContext);
+
+  const { data: userInfo, isLoading } = useQuery<IStudent>(
+    "instructor",
+    async () => await baseGet("/students/my-profile"),
+    {
+      onSuccess: (data) => {
+        dispatch({
+          type: Types.open,
+          payload: {
+            type: "Success",
+            show: true,
+            header: "Hello",
+            content: <>Welcome {data?.email}</>,
+            buttonOK: "OK",
+          },
+        });
+      },
+    }
+  );
+
+  console.log(
+    "🚀 ~ file: Dashboard.tsx:70 ~ StudentDashboard ~ userInfo:",
+    userInfo
+  );
 
   const cards = useMemo(
     () => [
@@ -95,13 +124,17 @@ function StudentDashboard() {
 
   return (
     <div className="space-y-6">
+      <Helmet>
+        <title>Dashboard | {user?.email}</title>
+      </Helmet>
+
       <hr />
       <div className="h1 my-4">
         <h1 className="tablet:text-xl text-lg font-semibold leading-normal cursor-pointer border-l-2 border-red-700 pl-4">
           Welcome to your Portal Dashboard
         </h1>
         <h1 className="font-robo text-4xl border-l-2 font-thin logo-clipped border-indigo-300 pl-4">
-          {tokenUser.role || "Enoch"}
+          {userInfo?.email || "Enoch"}
         </h1>
       </div>
       <hr />

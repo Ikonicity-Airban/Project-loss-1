@@ -5,12 +5,17 @@ const {
   UpdateOneInstructorInfo,
   DeleteOneInstructor,
   GetOneInstructorStats,
+  GetInstructorProfile,
 } = require("../controllers/instructor.controller");
 const { authorizeRoles } = require("../middlewares/auth");
 
-instructorRouter
-  .route("/")
-  .get(authorizeRoles("admin", "instructor"), GetAllInstructors);
+instructorRouter.get(
+  "/",
+  authorizeRoles("admin", "instructor"),
+  GetAllInstructors
+);
+
+instructorRouter.get("/my-profile", GetInstructorProfile);
 
 instructorRouter
   .route("/:instructorId")

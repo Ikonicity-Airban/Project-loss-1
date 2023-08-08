@@ -3,9 +3,10 @@ const Department = require("./department.model");
 
 const InstructorSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User" },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String },
     coursesTeaching: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    assignments: [{ type: Schema.Types.ObjectId, ref: "Course" }],
     department: { type: Schema.Types.ObjectId, ref: "Department" },
   },
   { timestamps: true }

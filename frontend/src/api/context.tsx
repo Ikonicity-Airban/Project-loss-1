@@ -2,18 +2,18 @@ import React, { useReducer, createContext, Dispatch } from "react";
 import { ModalActions, authActions, authReducer } from "./reducer";
 
 const initialState = {
-  tokenUser: {
+  user: {
     _id: "",
     email: "",
     role: "",
+    department: {},
     accessToken: "",
-    refreshToken: "",
   },
   signUpInfo: {},
   modal: {
     show: false,
-    header: "",
-    content: "",
+    header: "Header",
+    content: <></>,
     onOk: () => undefined,
     buttonOK: "OK",
     type: "Success",

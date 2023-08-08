@@ -1,4 +1,10 @@
 import {
+  FaFacebookF,
+  FaInstagramSquare,
+  FaLinkedinIn,
+  FaYoutube,
+} from "react-icons/fa";
+import {
   faBaseball,
   faBasketball,
   faIcons,
@@ -12,9 +18,9 @@ export default function FooterComponent() {
   return (
     <Footer
       container
-      className="text-sm bg-gradient-to-t from-blue-950 to-green-900 text-white"
+      className="text-sm bg-gradient-to-t from-blue-950 to-green-900 text-white "
     >
-      <div className="w-full">
+      <div className="w-full max-w-screen-laptop mx-auto">
         <div className="">
           <div className="mx-0 mb-10">
             <LogoComponent />
@@ -70,11 +76,18 @@ export default function FooterComponent() {
             className="text-white text-sm"
           />
           <div className="mt-4 flex space-x-6 sm:mt-0 sm:justify-center">
-            <FontAwesomeIcon icon={faBasketball} />
-            <FontAwesomeIcon icon={faBaseball} />
-            <FontAwesomeIcon icon={faIcons} />
-            <FontAwesomeIcon icon={faIcons} />
-            <FontAwesomeIcon icon={faIcons} />
+            <a href="#">
+              <FaFacebookF />
+            </a>
+            <a href="#">
+              <FaLinkedinIn></FaLinkedinIn>
+            </a>
+            <a href="#">
+              <FaYoutube></FaYoutube>
+            </a>
+            <a href="#">
+              <FaInstagramSquare></FaInstagramSquare>
+            </a>
           </div>
         </div>
       </div>

@@ -28,11 +28,11 @@ const navLinks = [
 
 export default function NavbarComponent() {
   const activeLink: NavLinkProps["className"] = ({ isActive, isPending }) =>
-    `text-sm lg:px-2 py-1 mx-auto md:mx-0 font-semibold order-1 ${
+    `text-base lg:px-2 py-1 mx-auto md:mx-0 font-medium order-1 ${
       isPending
         ? "text-gray-700"
         : isActive
-        ? "border-primary md:border-b-2 text-primary"
+        ? "border-primary md:border-b-2 logo-clipped"
         : ""
     }`;
 
@@ -42,7 +42,7 @@ export default function NavbarComponent() {
       rounded
       className="z-[50] shadow bg-[#fff9] backdrop-blur-lg sticky top-0 w-full"
     >
-      <div className="flex-[2.1] flex items-center space-x-4">
+      <div className="flex-[1.9] flex items-center space-x-4">
         <div className="md:hidden px-2">
           <Navbar.Toggle />
         </div>

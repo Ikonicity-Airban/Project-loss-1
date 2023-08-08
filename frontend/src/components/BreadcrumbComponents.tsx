@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 
 import { Breadcrumb } from "flowbite-react";
-import { FaHouseChimney } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
 
 export default function BreadcrumbComponents() {
   const location = useLocation();
@@ -14,8 +14,8 @@ export default function BreadcrumbComponents() {
     >
       <Link to="/">
         <Breadcrumb.Item className="">
-          <FaHouseChimney className="fa fa-home px-2  text-primary dark:text-white" />
-          <p className="text-xs font-semibold text-primary">Home</p>
+          <FaHome className="fa fa-home text-primary dark:text-white" />
+          <p className="text-xs font-semibold pl-3 text-primary">Home</p>
         </Breadcrumb.Item>
       </Link>
       {pathArray.map((path, i) => (

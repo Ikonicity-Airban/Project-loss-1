@@ -2,47 +2,40 @@ import "../App.css";
 
 import { Avatar, Dropdown, Navbar, Sidebar } from "flowbite-react";
 import { Link, NavLink, Outlet, redirect } from "react-router-dom";
-import {
-  faArrowTrendUp,
-  faBookOpen,
-  faBoxArchive,
-  faDashboard,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { useContext, useEffect, useState } from "react";
 
 import { AppContext } from "../api/context";
 import { BreadcrumbComponents } from "../components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LogoComponent from "../components/LogoComponent";
-import { httpPrivate } from "../api/https";
+import { FaBookOpen, FaBoxOpen, FaFoursquare, FaReceipt } from "react-icons/fa";
+import useAxiosPrivate from "../api/hooks/useAxiosPrivate";
+import { IStudent } from "../api/@types";
 
 const studentSideLinks = [
-  { name: "Dashboard", link: "", icon: faDashboard },
-  { name: "Courses", link: "my-courses", icon: faBookOpen },
-  { name: "Assignment", link: "assignment", icon: faBoxArchive },
-  { name: "Result", link: "result", icon: faArrowTrendUp },
+  { name: "Dashboard", link: "", icon: <FaFoursquare /> },
+  { name: "Courses", link: "my-courses", icon: <FaBookOpen /> },
+  { name: "Assignment", link: "assignment", icon: <FaBoxOpen /> },
+  { name: "Result", link: "result", icon: <FaReceipt /> },
 ];
 export const StudentLayout = () => {
   const [toggle, setToggle] = useState(false);
   const [width, setWidth] = useState<number>(window.innerWidth);
 
+  const http = useAxiosPrivate();
   const {
-    state: { tokenUser },
+    state: { user },
   } = useContext(AppContext);
   console.log(
-    "🚀 ~ file: DashboardLayout.tsx:31 ~ StudentLayout ~ tokenUser:",
-    tokenUser
+    "🚀 ~ file: DashboardLayout.tsx:26 ~ StudentLayout ~ user:",
+    user
   );
 
   useEffect(() => {
     let fetched = false;
     const fetchUser = async () => {
-      const res = await httpPrivate.get("students/my-profile");
+      const res = await http.get<IStudent>("students/my-profile");
       const data = await res.data;
-      console.log(
-        "🚀 ~ file: DashboardLayout.tsx:42 ~ fetchUser ~ data:",
-        data
-      );
     };
 
     !fetched && fetchUser();
@@ -60,7 +53,7 @@ export const StudentLayout = () => {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  if (!tokenUser) {
+  if (!user) {
     redirect("/login");
   }
 
@@ -76,14 +69,14 @@ export const StudentLayout = () => {
         rounded
         className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
       >
-        <Navbar.Brand className="flex-[1.9]">
+        <div className="flex-[1.9]">
           <div className="tablet:hidden px-2">
             <Navbar.Toggle onClick={() => setToggle(!toggle)} />
           </div>
           <Link to="/">
             <LogoComponent />
           </Link>
-        </Navbar.Brand>
+        </div>
         <div className="p-2 md:pr-4">
           <Dropdown
             arrowIcon={false}
@@ -92,7 +85,7 @@ export const StudentLayout = () => {
               <Avatar
                 rounded
                 bordered
-                placeholderInitials={tokenUser.email.slice(0, 2).toUpperCase()}
+                placeholderInitials={user.email.slice(0, 2).toUpperCase()}
                 status="online"
               />
             }
@@ -129,7 +122,7 @@ export const StudentLayout = () => {
                 onClick={() => setToggle(false)}
               >
                 <Sidebar.Item className="text-xs sm:text-sm">
-                  <FontAwesomeIcon icon={icon} className="mr-4" />
+                  {icon}
                   {name}
                 </Sidebar.Item>
               </NavLink>
@@ -161,14 +154,14 @@ export const InstructorLayout = () => {
         rounded
         className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
       >
-        <Navbar.Brand className="flex-[1.9]">
+        <div className="flex-[1.9]">
           <div className="tablet:hidden px-2">
             <Navbar.Toggle />
           </div>
           <Link to="/">
             <LogoComponent />
           </Link>
-        </Navbar.Brand>
+        </div>
         <div className="p-2 md:pr-4">
           <Dropdown
             arrowIcon={false}
@@ -177,7 +170,7 @@ export const InstructorLayout = () => {
               <Avatar
                 rounded
                 bordered
-                // placeholderInitials={tokenUser.email.slice(0, 2).toUpperCase()}
+                // placeholderInitials={user.email.slice(0, 2).toUpperCase()}
                 status="online"
               />
             }
@@ -208,14 +201,14 @@ export const AdminLayout = () => {
         rounded
         className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
       >
-        <Navbar.Brand className="flex-[1.9]">
+        <div className="flex-[1.9]">
           <div className="tablet:hidden px-2">
             <Navbar.Toggle />
           </div>
           <Link to="/">
             <LogoComponent />
           </Link>
-        </Navbar.Brand>
+        </div>
         <div className="p-2 md:pr-4">
           <Dropdown
             arrowIcon={false}
@@ -224,7 +217,7 @@ export const AdminLayout = () => {
               <Avatar
                 rounded
                 bordered
-                // placeholderInitials={tokenUser.email.slice(0, 2).toUpperCase()}
+                // placeholderInitials={user.email.slice(0, 2).toUpperCase()}
                 status="online"
               />
             }

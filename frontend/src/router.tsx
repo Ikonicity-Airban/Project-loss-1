@@ -105,7 +105,7 @@ const router = createBrowserRouter([
         errorElement: <div>Error</div>,
         children: [
           {
-            path: "dashboard",
+            path: "",
             element: <InstructorDashboard />,
           },
           {

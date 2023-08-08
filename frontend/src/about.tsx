@@ -1,7 +1,8 @@
+import { BreadcrumbComponents } from "./components";
+import FacultySection from "./pages/home/FacultySection";
+import Heading from "./components/Heading";
 import React from "react";
 import Section from "./components/Section";
-import Heading from "./components/Heading";
-import { BreadcrumbComponents } from "./components";
 
 const AboutPage: React.FC = () => {
   return (
@@ -54,7 +55,7 @@ const AboutPage: React.FC = () => {
           </ul>
         </p>
       </Section>
-
+      <FacultySection></FacultySection>
       <Section>
         <h2>Academic Programs</h2>
         <p>
