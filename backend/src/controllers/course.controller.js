@@ -29,6 +29,11 @@ async function RegisterCourse(req, res) {
 
   if (!student) throw new NotFoundError("No student with the Id " + studentId);
   if (!course) throw new NotFoundError("No course with the Id " + courseId);
+
+  const alreadyRegister = student.coursesOffered.find(
+    (course) => course.toString() == courseId
+  );
+  if (alreadyRegister) throw new BadRequestError("You have already registered");
   student.coursesOffered.push(courseId);
   student.save();
   res.status(StatusCodes.OK).json(student);
@@ -53,7 +58,10 @@ async function UnRegisterCourse(req, res) {
 
 // Get all available courses
 async function GetAllCourses(req, res) {
-  const courses = await Course.find({}).populate("department", "name").lean();
+  const courses = await Course.find({})
+    .populate("department", "name")
+    .populate("instructor")
+    .lean();
   res.status(StatusCodes.OK).json({ courses, count: courses.length });
 }
 

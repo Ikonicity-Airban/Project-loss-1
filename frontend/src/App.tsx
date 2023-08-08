@@ -18,6 +18,7 @@ function App() {
       type: Types.close,
       payload: {
         ...modal,
+        content: "",
         type: "Success",
         buttonOK: "OK",
         show: false,

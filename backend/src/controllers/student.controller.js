@@ -17,14 +17,14 @@ async function GetAllStudents(req, res) {
 // Get students for a Student
 async function GetOneStudentStats(req, res) {
   const { role, userId } = res.locals.user;
-
-  if (!(role == "admin" || role == "instructor"))
+  if (!(role == "admin" || role == "student"))
     throw new UnauthenticatedError("You are not authorized");
 
-  const student = await Student.findOne({ user: userId })
+  const student = await Student.findOne({ userId })
     .populate("coursesOffered")
+    // .populate("department")
     .lean();
-  if (!student) throw new NotFoundError("student Not found");
+  if (!student) throw new NotFoundError("Student Not found");
   res.status(StatusCodes.OK).json(student);
 }
 

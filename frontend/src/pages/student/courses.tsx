@@ -1,46 +1,26 @@
-import { AppContext } from "../../api/context";
 import CoursesList from "../courses/CoursesList";
 import { ListGroup } from "flowbite-react";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
-import { baseGet } from "../../api/base";
-import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useState } from "react";
+import { IStudent } from "../../api/@types";
+import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
+import { AxiosResponse } from "axios";
+import { courseColumns } from "../../api/resource/columns";
 
 const gridStyle = { minHeight: 550, minWidth: 860 };
-
-const columns = [
-  {
-    name: "id",
-    header: "Id",
-    type: "number",
-    defaultWidth: 80,
-  },
-  { name: "title", defaultFlex: 1.5, header: "Title" },
-  {
-    name: "Code",
-    defaultFlex: 1,
-    header: "code",
-    // render: ({ value }) => (flags[value] ? flags[value] : value),
-  },
-  { name: "description", defaultFlex: 1, header: "Description" },
-  { name: "department", defaultFlex: 1, header: "Department" },
-  { name: "instructor", defaultFlex: 1, header: "Instructor" },
-];
 
 function StudentCoursesPage() {
   const [activateRowOnFocus] = useState(true);
 
-  const {
-    state: { tokenUser },
-  } = useContext(AppContext);
+  const http = useAxiosPrivate();
 
-  const { data } = useQuery(
-    "user",
-    async () => baseGet(`/${tokenUser.role}/${tokenUser._id}`),
+  const { data: userInfo } = useQuery<AxiosResponse<IStudent>>(
+    "student",
+    async () => await http.get("/students/my-profile"),
     {
-      cacheTime: 78600,
+      refetchOnWindowFocus: true,
     }
   );
 
@@ -51,12 +31,13 @@ function StudentCoursesPage() {
           <Section title="Registered Courses">
             <div className="overflow-auto z-10">
               {/* add new course */}
+
               <ReactDataGrid
                 idProperty="id"
                 style={gridStyle}
                 activateRowOnFocus={activateRowOnFocus}
-                columns={columns}
-                dataSource={data?.coursesOffered || []}
+                columns={courseColumns}
+                dataSource={userInfo?.data?.coursesOffered || []}
               />
             </div>
             {/* all courses semester by semester list add and delete */}
