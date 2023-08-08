@@ -2,46 +2,27 @@ import { Button, ListGroup } from "flowbite-react";
 
 import { AppContext } from "../../api/context";
 import CoursesList from "../courses/CoursesList";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FaPlus } from "react-icons/fa";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { baseGet } from "../../api/base";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { courseColumns } from "../../api/resource/columns";
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useState } from "react";
 
 const gridStyle = { minHeight: 550, minWidth: 860 };
 
-const columns = [
-  {
-    name: "id",
-    header: "Id",
-    type: "number",
-    defaultWidth: 80,
-  },
-  { name: "title", defaultFlex: 1.5, header: "Title" },
-  {
-    name: "Code",
-    defaultFlex: 1,
-    header: "code",
-    // render: ({ value }) => (flags[value] ? flags[value] : value),
-  },
-  { name: "description", defaultFlex: 1, header: "Description" },
-  { name: "department", defaultFlex: 1, header: "Department" },
-  { name: "instructor", defaultFlex: 1, header: "Instructor" },
-];
-
 function InstructorCoursesPage() {
   const [activateRowOnFocus] = useState(true);
 
   const {
-    state: { tokenUser },
+    state: { user },
   } = useContext(AppContext);
 
   const { data } = useQuery(
     "user",
-    async () => baseGet(`/${tokenUser.role}/${tokenUser._id}`),
+    async () => baseGet(`/${user.role}/${user._id}`),
     {
       cacheTime: 78600,
     }
@@ -52,7 +33,7 @@ function InstructorCoursesPage() {
         <ListGroup.Item>
           <div className="w-full p-2 ">
             <Button>
-              <FontAwesomeIcon icon={faPlus} className="mr-4" />
+              <FaPlus className="mr-4" />
               register
             </Button>
           </div>
@@ -65,7 +46,8 @@ function InstructorCoursesPage() {
                 idProperty="id"
                 style={gridStyle}
                 activateRowOnFocus={activateRowOnFocus}
-                columns={columns}
+                columns={courseColumns}
+                shareSpaceOnResize
                 dataSource={data?.coursesOffered || []}
               />
             </div>

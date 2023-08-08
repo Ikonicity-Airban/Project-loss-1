@@ -65,10 +65,10 @@ async function CreateAccount(req, res) {
     createdUser.level = 100;
   } else if (basePath === "instructor") {
     user.role = "instructor";
-    createdUser = await Instructor.create({ user: user._id, ...req.body });
+    createdUser = await Instructor.create({ userId: user._id, ...req.body });
   }
   user.save();
-  createdUser.populate("user");
+  createdUser.populate("userId");
   //Token services
 
   //successful response

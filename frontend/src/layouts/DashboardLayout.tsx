@@ -3,17 +3,18 @@ import "../App.css";
 import { Avatar, Dropdown, Navbar, Sidebar } from "flowbite-react";
 import { Link, NavLink, Outlet, redirect } from "react-router-dom";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { AppContext } from "../api/context";
 import { BreadcrumbComponents } from "../components";
 import LogoComponent from "../components/LogoComponent";
-import { FaBookOpen, FaBoxOpen, FaFoursquare, FaReceipt } from "react-icons/fa";
+import { FaBookOpen, FaBoxOpen, FaDiceFour, FaReceipt } from "react-icons/fa";
 import useAxiosPrivate from "../api/hooks/useAxiosPrivate";
 import { IStudent } from "../api/@types";
+import useLocalStorage from "../api/hooks/useLocalStorage";
+import { defaultStudent } from "../api/reducer";
 
 const studentSideLinks = [
-  { name: "Dashboard", link: "", icon: <FaFoursquare /> },
+  { name: "Dashboard", link: "", icon: <FaDiceFour /> },
   { name: "Courses", link: "my-courses", icon: <FaBookOpen /> },
   { name: "Assignment", link: "assignment", icon: <FaBoxOpen /> },
   { name: "Result", link: "result", icon: <FaReceipt /> },
@@ -23,26 +24,24 @@ export const StudentLayout = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
 
   const http = useAxiosPrivate();
-  const {
-    state: { user },
-  } = useContext(AppContext);
-  console.log(
-    "🚀 ~ file: DashboardLayout.tsx:26 ~ StudentLayout ~ user:",
-    user
+  const [student, setStudent] = useLocalStorage<IStudent>(
+    "student",
+    defaultStudent
   );
 
   useEffect(() => {
     let fetched = false;
     const fetchUser = async () => {
       const res = await http.get<IStudent>("students/my-profile");
-      const data = await res.data;
+      const user = res.data;
+      setStudent(user);
     };
 
     !fetched && fetchUser();
     return () => {
-      fetched = false;
+      fetched = true;
     };
-  });
+  }, [http]);
 
   useEffect(() => {
     function resize(e: UIEvent) {
@@ -53,7 +52,7 @@ export const StudentLayout = () => {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  if (!user) {
+  if (!student.userId) {
     redirect("/login");
   }
 
@@ -85,7 +84,11 @@ export const StudentLayout = () => {
               <Avatar
                 rounded
                 bordered
-                placeholderInitials={user.email.slice(0, 2).toUpperCase()}
+                placeholderInitials={
+                  student.userId
+                    ? student.userId?.email.slice(0, 2).toUpperCase()
+                    : ""
+                }
                 status="online"
               />
             }
@@ -113,7 +116,7 @@ export const StudentLayout = () => {
       >
         <Sidebar.ItemGroup>
           {studentSideLinks.map(({ name, icon, link }) => (
-            <div className="p-2 mt-10" key={name}>
+            <div className="p-4 mt-10" key={name}>
               <NavLink
                 to={link}
                 className={({ isActive }) =>
@@ -121,10 +124,10 @@ export const StudentLayout = () => {
                 }
                 onClick={() => setToggle(false)}
               >
-                <Sidebar.Item className="text-xs sm:text-sm">
-                  {icon}
-                  {name}
-                </Sidebar.Item>
+                <div className="text-xs sm:text-sm flex items-center gap-6 ">
+                  <span>{icon}</span>
+                  <span>{name}</span>
+                </div>
               </NavLink>
             </div>
           ))}

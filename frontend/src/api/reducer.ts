@@ -36,18 +36,31 @@ export type ModalActions =
 
 export type authActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
+export const defaultStudent = {
+  firstName: "John",
+  lastName: "Doe",
+  email: "john.doe@gmail.com",
+  role: "student",
+};
+
 export const authReducer = <S>(
   state: S,
   action: ModalActions | authActions
 ) => {
   switch (action.type) {
     case Types.login:
+      localStorage.setItem("user", JSON.stringify(action.payload.tokenUser));
+      localStorage.setItem(
+        "access_token",
+        JSON.stringify(action.payload.accessToken)
+      );
       return {
         ...state,
         ...action.payload,
       };
 
     case Types.logout:
+      localStorage.removeItem("user");
       return {
         ...state,
         user: null,

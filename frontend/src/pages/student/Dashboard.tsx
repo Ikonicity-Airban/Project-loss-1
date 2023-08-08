@@ -1,92 +1,54 @@
 import { Card, ListGroup, Progress } from "flowbite-react";
-import { useContext, useMemo } from "react";
+import { IAssignment, IStudent } from "../../api/@types";
+import { assignmentColumns, courseColumns } from "../../api/resource/columns";
 
-import { AppContext } from "../../api/context";
+import { AxiosResponse } from "axios";
 import Heading from "../../components/Heading";
+import { Helmet } from "react-helmet";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
-import { Types } from "../../api/reducer";
-import { baseGet } from "../../api/base";
 import { getCourse } from "../../api/resource/course";
+import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
+import { useMemo } from "react";
 import { useQuery } from "react-query";
-import { IStudent } from "../../api/@types";
-import { Helmet } from "react-helmet";
 
 // const defaultStyle: { [key: string]: string | number } = {
 //   maxWidth: "960px",
 // };
 
-const courseColumns = [
-  {
-    name: "_id",
-    header: "Id",
-    defaultVisible: true,
-    type: "number",
-    defaultWidth: 80,
-  },
-  { name: "title", header: "Title" },
-  {
-    name: "description",
-    defaultFlex: 1,
-    header: "Description",
-  },
-  { name: "code", defaultWidth: 120, header: "code" },
-  { name: "instructor", defaultFlex: 1, header: "Instructor" },
-  // { name: "department", defaultFlex: 1, header: "Department" },
-];
-
-const assignmentColumns = [
-  {
-    name: "_id",
-    header: "Id",
-    defaultVisible: false,
-    type: "number",
-    defaultWidth: 40,
-  },
-  { name: "title", defaultFlex: 1, header: "Title" },
-  {
-    name: "description",
-    defaultFlex: 1,
-    header: "Description",
-    // render: ({ value }) => (flags[value] ? flags[value] : value),
-  },
-  { name: "Course", defaultFlex: 1, header: "course" },
-  { name: "Date", defaultFlex: 1, type: "date", header: "Date" },
-  { name: "Action", defaultWidth: 100, header: "Action" },
-];
-
 function StudentDashboard() {
+  const http = useAxiosPrivate();
   const { data } = useQuery("course", getCourse, {
-    cacheTime: 3600,
+    cacheTime: 3600000,
+    refetchInterval: 3600000,
   });
-  const {
-    dispatch,
-    state: { user },
-  } = useContext(AppContext);
 
-  const { data: userInfo, isLoading } = useQuery<IStudent>(
-    "instructor",
-    async () => await baseGet("/students/my-profile"),
+  const { data: assignment } = useQuery(
+    "assignments",
+    async () => await http.get("/assignments"),
     {
-      onSuccess: (data) => {
+      cacheTime: 3600000,
+      refetchInterval: 3600000,
+    }
+  );
+  const { data: userInfo, isLoading } = useQuery<AxiosResponse<IStudent>>(
+    "student",
+    async () => await http.get("/students/my-profile")
+  );
+  /* {
+      onSuccess: ({ data }) => {
         dispatch({
           type: Types.open,
           payload: {
             type: "Success",
             show: true,
             header: "Hello",
-            content: <>Welcome {data?.email}</>,
+            content: <>Welcome {data?.firstName}</>,
             buttonOK: "OK",
           },
         });
       },
-    }
-  );
-
-  console.log(
-    "🚀 ~ file: Dashboard.tsx:70 ~ StudentDashboard ~ userInfo:",
-    userInfo
-  );
+    } */
 
   const cards = useMemo(
     () => [
@@ -125,7 +87,7 @@ function StudentDashboard() {
   return (
     <div className="space-y-6">
       <Helmet>
-        <title>Dashboard | {user?.email}</title>
+        <title>Dashboard | {userInfo?.data.firstName || "Student"}</title>
       </Helmet>
 
       <hr />
@@ -134,7 +96,7 @@ function StudentDashboard() {
           Welcome to your Portal Dashboard
         </h1>
         <h1 className="font-robo text-4xl border-l-2 font-thin logo-clipped border-indigo-300 pl-4">
-          {userInfo?.email || "Enoch"}
+          {userInfo?.data.firstName || "Enoch"}
         </h1>
       </div>
       <hr />
@@ -184,7 +146,7 @@ function StudentDashboard() {
                 minWidth: "100%",
               }}
               columns={assignmentColumns}
-              dataSource={[]}
+              dataSource={assignment?.data || []}
             />
           </div>
         </Section>

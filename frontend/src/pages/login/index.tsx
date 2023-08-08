@@ -3,14 +3,12 @@ import { CustomError, ILoginResponse } from "../../api/@types";
 import { FaEnvelope, FaExclamationCircle, FaLock } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { AppContext } from "../../api/context";
 import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
 import { useContext } from "react";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import useLocalStorage from "../../api/hooks/useLocalStorage";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 
 interface IFormInput {
@@ -30,6 +28,7 @@ const formFields = [
     icon: <FaLock />,
   },
 ];
+
 function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
   const [showPass, setShowPass] = useState(false);
@@ -38,11 +37,6 @@ function LoginPage() {
 
   const { state } = useLocation();
   const navigate = useNavigate();
-
-  const [accessToken, setAccessToken] = useLocalStorage<string>(
-    "access_token",
-    ""
-  );
   const { dispatch } = useContext(AppContext);
 
   const { mutate, isLoading, isError } = useMutation(
@@ -55,9 +49,6 @@ function LoginPage() {
     },
     {
       onSuccess: (data) => {
-        console.log("🚀 ~ file: index.tsx:58 ~ LoginPage ~ data:", data);
-        setAccessToken(data.accessToken);
-        console.log(accessToken);
         dispatch({
           type: Types.login,
           payload: data,
@@ -121,7 +112,7 @@ function LoginPage() {
               disabled={isLoading}
               className="placeholder:capitalize placeholder:mx-10"
               type={showPass ? "text" : name}
-              value={state?.email}
+              defaultValue={name == "email" && state?.email}
               id={name}
               // placeholder={label}
               {...register(name as keyof IFormInput)}

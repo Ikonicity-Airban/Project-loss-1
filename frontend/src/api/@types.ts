@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
 
 type dataResponse = {
-  _id: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  _id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
 };
 
 type IUser = {
@@ -14,10 +14,11 @@ type IUser = {
 } & dataResponse;
 
 export type IStudent = {
+  userId?: IUser;
   firstName?: string;
   lastName?: string;
-} & dataResponse &
-  IUser;
+  coursesOffered?: ICourse[];
+} & dataResponse;
 
 export type GenericResponse = {
   status: string;
@@ -33,7 +34,7 @@ export type ICourse = {
   title: string;
   code: string;
   description?: string;
-  department?: IDepartment;
+  department?: IDepartment["name"];
 } & dataResponse;
 
 export type IDepartment = {
@@ -52,7 +53,7 @@ export type IAssignment = {
 } & dataResponse;
 
 export type IInstructor = {
-  user: IUser;
+  userId?: IUser;
   name?: string;
   coursesTeaching?: ICourse[];
   assignment: IAssignment[];
