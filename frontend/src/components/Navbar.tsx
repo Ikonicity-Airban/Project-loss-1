@@ -20,6 +20,10 @@ const navLinks = [
     name: "About Us",
     link: "/about-us",
   },
+  {
+    name: "Staff",
+    link: "/Staff",
+  },
 ];
 
 export default function NavbarComponent() {

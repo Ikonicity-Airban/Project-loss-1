@@ -26,10 +26,17 @@ const ProgramsSection: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="my-6">
           <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi
-            ea dolore porro, facilis asperiores, fugiat adipisci molestias neque
-            esse obcaecati corrupti natus nesciunt eum. Animi aut excepturi
-            rerum maiores. Repudiandae?
+            We offer a range of programs and courses that are designed to meet
+            the needs of students at all levels, from undergraduate to graduate
+            and beyond. On our website, you'll find information about our
+            faculty members, their research interests, and their contact
+            information. You can also browse our course offerings, view our
+            academic calendar, and stay up-to-date with the latest news and
+            events happening in our department. Whether you're a current
+            student, a prospective student, or just interested in learning more
+            about our department, we invite you to explore our website and
+            discover all that we have to offer. Thank you for visiting and we
+            look forward to hearing from you soon!
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

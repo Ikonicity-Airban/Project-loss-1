@@ -32,7 +32,7 @@ export default function CoursePage() {
               <h4 className="logo-clipped text-center p-2">All Courses</h4>
               <Sidebar.ItemGroup>
                 <Sidebar.Item>Science</Sidebar.Item>
-                <Sidebar.Item>Mathematics</Sidebar.Item>
+                <Sidebar.Item>Expert System</Sidebar.Item>
                 <Sidebar.Item>Robotics</Sidebar.Item>
               </Sidebar.ItemGroup>
               <Sidebar.ItemGroup>

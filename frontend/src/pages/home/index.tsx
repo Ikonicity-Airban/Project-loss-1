@@ -37,7 +37,7 @@ export default function HomeComponent() {
             className="flex flex-col space-y-20 max-w-6xl z-[10] p-3 font-semibold"
           >
             <h2 className="font-robo md:text-6xl logo-clipped text-center title-design text-white ">
-              Computer Science Air Force Base Portal
+              Computer Science Departmental Portal
             </h2>
             <a
               href="/login"
@@ -73,7 +73,7 @@ export default function HomeComponent() {
           </div>
           <Section
             title=""
-            subtitle="Welcome to the Academic Departmental Portal!"
+            subtitle="Welcome to the Computer Departmental Portal!"
           >
             <p className="text-base leading-loose">
               We're glad you're here and hope you find our website to be a
@@ -83,22 +83,10 @@ export default function HomeComponent() {
             </p>
           </Section>{" "}
         </div>
-        <Section title="What We Offer?">
-          <p className="text-base leading-loose">
-            We offer a range of programs and courses that are designed to meet
-            the needs of students at all levels, from undergraduate to graduate
-            and beyond. On our website, you'll find information about our
-            faculty members, their research interests, and their contact
-            information. You can also browse our course offerings, view our
-            academic calendar, and stay up-to-date with the latest news and
-            events happening in our department. Whether you're a current
-            student, a prospective student, or just interested in learning more
-            about our department, we invite you to explore our website and
-            discover all that we have to offer. Thank you for visiting and we
-            look forward to hearing from you soon!
-          </p>
-          <ProgramsSection />
-        </Section>
+
+        <p className="text-base leading-loose"></p>
+        <ProgramsSection />
+
         <FacultySection />
       </div>
     </main>

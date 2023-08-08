@@ -7,9 +7,8 @@ const AboutPage: React.FC = () => {
   return (
     <div className="max-w-screen-laptop mx-auto">
       <BreadcrumbComponents />
-      <Heading section_title="About us" />
+      <Heading section_title="" />
       <Section subtitle="Mission and Vision">
-        <h2></h2>
         <p>
           Our mission is to provide a world-class education in computer science
           and foster cutting-edge research in collaboration with industry and
@@ -23,13 +22,13 @@ const AboutPage: React.FC = () => {
 
       <Section subtitle="Departmental Overview">
         <p>
-          Established in [year], the Computer Science Department at
-          [University/Institution Name] is renowned for its excellence in
-          teaching and research. With a faculty team of [number] experienced
-          educators and [number] dedicated staff members, we are committed to
-          providing a stimulating and supportive learning environment for our
-          students. Our department offers a wide range of academic programs,
-          cutting-edge research opportunities, and state-of-the-art facilities.
+          Established in [year], the Computer Science Department at [NACEST] is
+          renowned for its excellence in teaching and research. With a faculty
+          team of [number] experienced educators and [number] dedicated staff
+          members, we are committed to providing a stimulating and supportive
+          learning environment for our students. Our department offers a wide
+          range of academic programs, cutting-edge research opportunities, and
+          state-of-the-art facilities.
         </p>
       </Section>
 

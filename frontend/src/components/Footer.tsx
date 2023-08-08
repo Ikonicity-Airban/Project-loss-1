@@ -25,6 +25,9 @@ export default function FooterComponent() {
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Flowbite</Footer.Link>
                 <Footer.Link href="#">Tailwind CSS</Footer.Link>
+                <Footer.Link href="#">Academic calender</Footer.Link>
+                <Footer.Link href="#">Event calender</Footer.Link>
+                <Footer.Link href="#">Admission calender</Footer.Link>
               </Footer.LinkGroup>
             </div>
             <div>
@@ -32,6 +35,21 @@ export default function FooterComponent() {
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Github</Footer.Link>
                 <Footer.Link href="#">Discord</Footer.Link>
+                <Footer.Link href="#">NACEST campus life</Footer.Link>
+                <Footer.Link href="#">Online community</Footer.Link>
+                <Footer.Link href="#">Event</Footer.Link>
+              </Footer.LinkGroup>
+            </div>
+            <div>
+              <Footer.Title title="Student" className="text-white text-sm" />
+              <Footer.LinkGroup col className="text-white text-sm">
+                <Footer.Link href="http://localhost:5173/login">
+                  Student Information
+                </Footer.Link>
+                <Footer.Link href="#">Course Information</Footer.Link>
+                <Footer.Link href="#">Schedule of classes</Footer.Link>
+                <Footer.Link href="#">Technical services</Footer.Link>
+                <Footer.Link href="#">Black Board(portal)</Footer.Link>
               </Footer.LinkGroup>
             </div>
             <div>
