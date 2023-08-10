@@ -21,8 +21,8 @@ async function GetOneStudentStats(req, res) {
     throw new UnauthenticatedError("You are not authorized");
 
   const student = await Student.findOne({ userId })
-    .populate("coursesOffered")
-    .populate("userId")
+    .populate("coursesOffered userId")
+
     // .populate("department")
     .lean();
   if (!student) throw new NotFoundError("Student Not found");
@@ -42,7 +42,9 @@ async function UpdateOneStudentInfo(req, res) {
       new: true,
       runValidators: true,
     }
-  ).lean();
+  )
+    .populate("userId")
+    .lean();
   if (!student) throw new NotFoundError("student Not found");
   res.status(StatusCodes.OK).json(student);
 }

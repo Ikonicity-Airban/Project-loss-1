@@ -33,7 +33,9 @@ async function GetInstructorProfile(req, res) {
   if (!(role == "admin" || role == "instructor"))
     throw new UnauthenticatedError("You are not authorized");
 
-  const instructor = await Instructor.findById(userId).lean();
+  const instructor = await Instructor.findOne({ userId })
+    .populate("userId")
+    .lean();
   if (!instructor) throw new NotFoundError("instructor Not found");
   res.status(StatusCodes.OK).json(instructor);
 }

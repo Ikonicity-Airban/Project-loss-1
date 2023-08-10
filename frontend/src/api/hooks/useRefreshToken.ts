@@ -1,6 +1,6 @@
 import { ILoginResponse } from "../@types";
-import axios from "../https";
 import { Types } from "../reducer";
+import axios from "../https";
 import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
@@ -10,12 +10,12 @@ const useRefreshToken = () => {
     const response = await axios.get<ILoginResponse>("/refresh", {
       withCredentials: true,
     });
-    console.log(response.data.access_token);
+    console.log(response.data.accessToken);
     dispatch({
       type: Types.login,
       payload: response.data,
     });
-    return response.data.access_token;
+    return response.data.accessToken;
   };
   return refresh;
 };

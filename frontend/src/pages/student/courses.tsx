@@ -1,13 +1,13 @@
+import { AxiosResponse } from "axios";
 import CoursesList from "../courses/CoursesList";
+import { IStudent } from "../../api/@types";
 import { ListGroup } from "flowbite-react";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
+import { courseColumns } from "../../api/resource/columns";
+import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 import { useQuery } from "react-query";
 import { useState } from "react";
-import { IStudent } from "../../api/@types";
-import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
-import { AxiosResponse } from "axios";
-import { courseColumns } from "../../api/resource/columns";
 
 const gridStyle = { minHeight: 550, minWidth: 860 };
 
@@ -34,6 +34,7 @@ function StudentCoursesPage() {
 
               <ReactDataGrid
                 idProperty="id"
+                checkboxColumn
                 style={gridStyle}
                 activateRowOnFocus={activateRowOnFocus}
                 columns={courseColumns}

@@ -7,7 +7,7 @@ const assignmentSchema = new Schema(
     course: { type: Schema.Types.ObjectId, ref: "Course" },
     instructor: { type: Schema.Types.ObjectId, ref: "Instructor" },
     level: { type: Number, required: true, enum: [100, 200, 300, 400] },
-    assignment: { type: String, required: true },
+    file: { type: String, required: true },
   },
   { timestamps: true }
 );

@@ -18,6 +18,12 @@ export type IStudent = {
   firstName?: string;
   lastName?: string;
   coursesOffered?: ICourse[];
+  level?: number | 100 | 200 | 300 | 400;
+  reg_no?: string;
+  sex?: "male" | "female";
+  mobile_phone?: string;
+  contact_address?: string;
+  year_of_graduation?: string;
 } & dataResponse;
 
 export type GenericResponse = {
@@ -48,16 +54,19 @@ export type IDepartment = {
 
 export type IAssignment = {
   title?: string;
+  file?: string;
+  level?: 100 | 200 | 300 | 400;
   description?: string;
-  course: ICourse;
+  course?: ICourse["title"];
 } & dataResponse;
 
 export type IInstructor = {
   userId?: IUser;
-  name?: string;
+  firstName?: string;
+  lastName?: string;
   coursesTeaching?: ICourse[];
   assignment: IAssignment[];
-  department?: IDepartment;
+  department?: IDepartment["name"];
 } & dataResponse;
 
 export type ISubmission = {
@@ -77,10 +86,16 @@ export type CustomError = {
 };
 
 export type IModal = {
-  type: "Success" | "Error";
-  show: boolean;
+  type?: "Success" | "Error" | string;
+  show?: boolean;
   header?: string;
   content?: ReactNode;
   buttonOK: "OK" | "Submit" | "Register";
   onOk?: () => undefined | void;
 };
+
+export type IResult = {
+  student: IStudent;
+  courses: ICourse[];
+  level: 100 | 200 | 300 | 400;
+} & dataResponse;
