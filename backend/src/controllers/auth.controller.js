@@ -2,8 +2,9 @@ const { StatusCodes } = require("http-status-codes");
 const User = require("../models/user.model");
 const Student = require("../models/student.model");
 const Instructor = require("../models/instructor.model");
-const { signTokens, verifyAccessToken } = require("../utils/jwt");
+const { signTokens } = require("../utils/jwt");
 const { createTokenUser } = require("../utils/users");
+
 const {
   BadRequestError,
   UnauthenticatedError,
@@ -68,7 +69,7 @@ async function CreateAccount(req, res) {
     createdUser = await Instructor.create({ userId: user._id, ...req.body });
   }
   user.save();
-  createdUser.populate("userId");
+  createdUser.populate("userId", "email role department");
   //Token services
 
   //successful response

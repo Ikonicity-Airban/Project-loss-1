@@ -3,13 +3,14 @@ import { CustomError, ILoginResponse } from "../../api/@types";
 import { FaEnvelope, FaExclamationCircle, FaLock } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { AppContext } from "../../api/context";
 import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
+import https from "../../api/https";
 import { useContext } from "react";
 import { useMutation } from "react-query";
 import { useState } from "react";
-import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 
 interface IFormInput {
   email: string;
@@ -33,8 +34,6 @@ function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
   const [showPass, setShowPass] = useState(false);
 
-  const http = useAxiosPrivate();
-
   const { state } = useLocation();
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
@@ -42,9 +41,7 @@ function LoginPage() {
   const { mutate, isLoading, isError } = useMutation(
     "login",
     async (formData: IFormInput) => {
-      const response = await http.post<ILoginResponse>("/login", formData, {
-        withCredentials: true,
-      });
+      const response = await https.post<ILoginResponse>("/login", formData);
       return response.data;
     },
     {
@@ -62,7 +59,6 @@ function LoginPage() {
         dispatch({
           type: Types.open,
           payload: {
-            show: true,
             buttonOK: "OK",
             header: "Error",
             onOk: function () {

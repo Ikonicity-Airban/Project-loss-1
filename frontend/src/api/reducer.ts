@@ -1,4 +1,4 @@
-import { ILoginResponse, IModal } from "./@types";
+import { IInstructor, ILoginResponse, IModal } from "./@types";
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -42,6 +42,11 @@ export const defaultStudent = {
   email: "john.doe@gmail.com",
   role: "student",
 };
+export const defaultInstructor: IInstructor = {
+  name: "John",
+  assignment: [],
+  department: "Computer Science",
+};
 
 export const authReducer = <S>(
   state: S,
@@ -60,7 +65,7 @@ export const authReducer = <S>(
       };
 
     case Types.logout:
-      localStorage.removeItem("user");
+      localStorage.clear();
       return {
         ...state,
         user: null,
@@ -68,12 +73,13 @@ export const authReducer = <S>(
     case Types.open:
       return {
         ...state,
-        modal: action.payload,
+        modal: { ...action.payload, show: true },
       };
     case Types.close:
       return {
         ...state,
-        modal: action.payload,
+
+        modal: { ...action.payload, show: false },
       };
 
     default:

@@ -1,6 +1,7 @@
 import "./App.css";
 
 import { Button, Modal } from "flowbite-react";
+import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 
 import { AppContext } from "./api/context";
 import { Outlet } from "react-router-dom";
@@ -44,7 +45,18 @@ function App() {
               : ""
           }`}
         >
-          <span className="text-sm text-center p-4">{modal.content}</span>
+          <div className="flex p-6 items-center gap-6">
+            {modal.type == "Success" ? (
+              <FaExclamationCircle className="text-7xl" />
+            ) : modal.type == "Error" ? (
+              <FaCheckCircle className="text-6xl flex-[0.3]" />
+            ) : (
+              ""
+            )}
+            <span className="text-sm flex-1 text-center p-4">
+              {modal.content}
+            </span>
+          </div>
         </Modal.Body>
         <Modal.Footer className="justify-end">
           <Button

@@ -24,7 +24,7 @@ const CourseSchema = new Schema(
     instructor: {
       type: Schema.Types.ObjectId,
       ref: "Instructor",
-      // required: true,
+      required: true,
     },
   },
 

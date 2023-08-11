@@ -7,18 +7,12 @@ import {
   TextInput,
 } from "flowbite-react";
 import { CustomError, ILoginResponse } from "../../api/@types";
-import {
-  FaCheckCircle,
-  FaEnvelope,
-  FaExclamationCircle,
-  FaKey,
-  FaLock,
-  FaUser,
-} from "react-icons/fa";
+import { FaEnvelope, FaKey, FaLock, FaUser } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AppContext } from "../../api/context";
+import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
 import { httpPrivate } from "../../api/https";
 import { useContext } from "react";
@@ -92,12 +86,11 @@ function SignUpPage() {
           payload: {
             show: true,
             header: "Success",
-            content: (
-              <div>
-                <FaCheckCircle />
-              </div>
-            ),
+            content: <p>Account created successfully</p>,
             buttonOK: "OK",
+            onOk() {
+              return;
+            },
             type: "Success",
           },
         });
@@ -108,14 +101,8 @@ function SignUpPage() {
         dispatch({
           type: Types.open,
           payload: {
-            show: true,
             header: "Success",
-            content: (
-              <div className="flex p-6 items-center gap-6">
-                <FaExclamationCircle className="text-7xl" />
-                <p>{error.response.data.msg}</p>
-              </div>
-            ),
+            content: <p>{error.response.data.msg}</p>,
             type: "Error",
             buttonOK: "OK",
           },
@@ -135,8 +122,11 @@ function SignUpPage() {
     <Card className="min-w-[315px] w-full mobile:max-w-md">
       <span className="flex place-content-center">
         <h3 className="logo-clipped text-center max-w-md my-6 font-semibold">
-          Create an Account as a {currentUser}
+          Sign up as {currentUser}
         </h3>
+      </span>
+      <span className="mx-auto">
+        <LogoComponent />
       </span>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 capitalize">
         {formFields.map(({ name, label, icon, type }) => (

@@ -1,8 +1,8 @@
 import { httpPrivate } from "../https";
 import useAuth from "./useAuth";
 import { useEffect } from "react";
-import useRefreshToken from "./useRefreshToken";
 import useLocalStorage from "./useLocalStorage";
+import useRefreshToken from "./useRefreshToken";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
@@ -16,9 +16,7 @@ const useAxiosPrivate = () => {
     const requestIntercept = httpPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${
-            auth?.accessToken || accessToken
-          }`;
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
         return config;
       },
@@ -43,7 +41,7 @@ const useAxiosPrivate = () => {
       httpPrivate.interceptors.request.eject(requestIntercept);
       httpPrivate.interceptors.response.eject(responseIntercept);
     };
-  }, [auth, refresh]);
+  }, [auth, refresh, accessToken]);
 
   return httpPrivate;
 };

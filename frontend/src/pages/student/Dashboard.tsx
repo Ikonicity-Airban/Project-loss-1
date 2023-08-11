@@ -150,19 +150,8 @@ function StudentDashboard() {
             />
           </div>
         </Section>
-        <Section>
-          <div className="overflow-auto w-full p-2">
-            <Heading section_title="All Courses" />
-            <ReactDataGrid
-              style={{
-                minWidth: "960px",
-              }}
-              emptyText="No Courses to view"
-              loading={isLoading}
-              columns={courseColumns}
-              dataSource={data?.courses || []}
-            />
-          </div>
+        <Section title="Notification">
+          <center>No notification</center>
         </Section>
       </ListGroup>
     </div>

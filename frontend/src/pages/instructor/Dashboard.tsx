@@ -1,63 +1,66 @@
-import { AppContext } from "../../api/context";
-import { ListGroup } from "flowbite-react";
-import Section from "../../components/Section";
-import { Types } from "../../api/reducer";
-import { useContext } from "react";
-import { useQuery } from "react-query";
-import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
+import { AxiosResponse } from "axios";
+import { Helmet } from "react-helmet";
 import { IInstructor } from "../../api/@types";
+import { ListGroup } from "flowbite-react";
+import ReactDataGrid from "@inovua/reactdatagrid-community";
+import Section from "../../components/Section";
+import { assignmentColumns } from "../../api/resource/columns";
+import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
+import { useQuery } from "react-query";
+
 // const defaultStyle: { [key: string]: string | number } = {
 //   maxWidth: "960px",
 // };
 
 function InstructorDashboard() {
   const http = useAxiosPrivate();
-  const { dispatch } = useContext(AppContext);
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useQuery(
-    "instructor",
-    async () => await http.get<IInstructor>("/instructors/my-profile"),
+
+  const { data: assignment, isLoading } = useQuery(
+    "assignments",
+    async () => await http.get("/assignments"),
     {
-      onSuccess: () => {
-        dispatch({
-          type: Types.open,
-          payload: {
-            type: "Success",
-            show: true,
-            header: "Hello",
-            content: <>Welcome</>,
-            buttonOK: "OK",
-          },
-        });
-      },
+      cacheTime: 3600000,
+      refetchInterval: 3600000,
     }
   );
-  console.log(
-    "🚀 ~ file: Dashboard.tsx:22 ~ InstructorDashboard ~ data:",
-    userInfo
+  const { data: userInfo } = useQuery<AxiosResponse<IInstructor>>(
+    "instructor",
+    async () => await http.get("/instructors/my-profile")
   );
+
   return (
-    <div className="space-y-6 mt-20 p-6 md:p-10">
+    <div className="space-y-6">
+      <Helmet>
+        <title>Dashboard | {userInfo?.data.lastName || "instructor"}</title>
+      </Helmet>
+
       <hr />
       <div className="h1 my-4">
         <h1 className="tablet:text-xl text-lg font-semibold leading-normal cursor-pointer border-l-2 border-red-700 pl-4">
           Welcome to your Portal Dashboard
         </h1>
         <h1 className="font-robo text-4xl border-l-2 font-thin logo-clipped border-indigo-300 pl-4">
-          {"Enoch"}
+          {userInfo?.data.lastName || "Enoch"}
         </h1>
       </div>
       <hr />
       <ListGroup>
-        <ListGroup.Item>
-          <Section title="Assignments">""</Section>
-        </ListGroup.Item>
-        <ListGroup.Item>
-          <Section title="Courses">""</Section>
-        </ListGroup.Item>
+        <Section title="Assignments">
+          <div className="overflow-auto w-full">
+            <ReactDataGrid
+              emptyText="No assignment for now 🚀"
+              style={{
+                minWidth: "100%",
+              }}
+              loading={isLoading}
+              columns={assignmentColumns}
+              dataSource={assignment?.data || []}
+            />
+          </div>
+        </Section>
+        <Section title="Notification">
+          <center>No notification</center>
+        </Section>
       </ListGroup>
     </div>
   );

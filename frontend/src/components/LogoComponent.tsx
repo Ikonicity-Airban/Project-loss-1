@@ -1,8 +1,12 @@
+import logo from "/logo.png";
+
 export default function LogoComponent() {
   return (
     <div className=" flex items-center">
-      <img src="logo.png" alt="logo" className="w-10" />
-      <h2 className="logo-clipped text-xl  font-semibold">PORTAL</h2>
+      <img src={logo} alt="logo" className="w-10" />
+      <h2 className="logo-clipped text-xl  font-bold">
+        CS<span className="text-xl text-black">DP</span>
+      </h2>
     </div>
   );
 }

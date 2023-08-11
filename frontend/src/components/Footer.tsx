@@ -4,13 +4,7 @@ import {
   FaLinkedinIn,
   FaYoutube,
 } from "react-icons/fa";
-import {
-  faBaseball,
-  faBasketball,
-  faIcons,
-} from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Footer } from "flowbite-react";
 import LogoComponent from "./LogoComponent";
 
@@ -25,9 +19,9 @@ export default function FooterComponent() {
           <div className="mx-0 mb-10">
             <LogoComponent />
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6 text-sm">
+          <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6 text-sm font-extralight">
             <div>
-              <Footer.Title title="about" className="text-white text-sm" />
+              <Footer.Title title="about" className="text-white text-sm " />
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Flowbite</Footer.Link>
                 <Footer.Link href="#">Tailwind CSS</Footer.Link>
@@ -70,7 +64,7 @@ export default function FooterComponent() {
         <Footer.Divider />
         <div className="w-full sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright
-            by="Ikoncity Airban™"
+            by="Ikonicity Airban™"
             href="#"
             year={2022}
             className="text-white text-sm"

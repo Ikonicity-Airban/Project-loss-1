@@ -41,7 +41,9 @@ async function UpdateOneStudentInfo(req, res) {
       new: true,
       runValidators: true,
     }
-  ).lean();
+  )
+    .populate("userId")
+    .lean();
   if (!student) throw new NotFoundError("student Not found");
   res.status(StatusCodes.OK).json(student);
 }
