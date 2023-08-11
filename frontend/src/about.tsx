@@ -65,7 +65,7 @@ const AboutPage: React.FC = () => {
           you with the skills and knowledge necessary for success in the field
           of computer science.
         </p>
-        <h3>Bachelor of Science in Computer Science</h3>
+        <h3>National Diploma in Computer Science</h3>
         <p>
           Our undergraduate program in Computer Science provides a solid
           foundation in core computer science concepts and programming. Students
@@ -75,7 +75,7 @@ const AboutPage: React.FC = () => {
           well-prepared for careers in software engineering, systems analysis,
           and more.
         </p>
-        <h3>Master of Science in Computer Science</h3>
+        <h3>Higher National Diploma [HND] in Computer Science</h3>
         <p>
           Our graduate program in Computer Science offers advanced coursework
           and research opportunities in specialized areas of computer science.
@@ -84,16 +84,6 @@ const AboutPage: React.FC = () => {
           provides a platform for in-depth exploration of cutting-edge topics
           and prepares students for leadership roles in industry or further
           research in academia.
-        </p>
-        <h3>Ph.D. in Computer Science</h3>
-        <p>
-          Our Ph.D. program in Computer Science is designed for aspiring
-          researchers and scholars. Students work closely with faculty members
-          to conduct original research in their chosen area of specialization.
-          The program emphasizes rigorous inquiry, scholarly publication, and
-          the development of critical thinking and research skills. Graduates of
-          the Ph.D. program go on to pursue careers in academia, industry
-          research, and leadership positions in the tech sector.
         </p>
       </Section>
     </div>

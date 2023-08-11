@@ -86,7 +86,7 @@ export const StudentLayout = () => {
                 bordered
                 placeholderInitials={
                   student.userId
-                    ? student.userId?.email.slice(0, 2).toUpperCase()
+                    ? student.userId?.email?.slice(0, 2).toUpperCase()
                     : ""
                 }
                 status="online"

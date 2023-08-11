@@ -5,19 +5,19 @@ import Section from "../../components/Section";
 const FacultySection: React.FC = () => {
   const facultyMembers = [
     {
-      name: "John Doe",
+      name: "Ike Innocent",
       title: "Professor",
       area: "Artificial Intelligence",
       image: "images/1.jpg",
     },
     {
-      name: "Jane Smith",
+      name: "Smith Agafa",
       title: "Associate Professor",
       area: "Data Science",
       image: "images/2.jpg",
     },
     {
-      name: "Michael Johnson",
+      name: "Chidinma Nwafor",
       title: "Assistant Professor",
       area: "Software Engineering",
       image: "images/3.jpg",
