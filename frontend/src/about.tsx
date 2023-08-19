@@ -33,28 +33,6 @@ const AboutPage: React.FC = () => {
         </p>
       </Section>
 
-      <Section subtitle="Faculty and Staff">
-        <p>
-          Our department boasts a team of highly qualified and accomplished
-          faculty members who are passionate about computer science education
-          and research. With expertise in various subfields of computer science,
-          our faculty members actively contribute to advancements in the
-          discipline. They are dedicated mentors who guide and inspire our
-          students to reach their full potential. Our committed staff members
-          ensure the smooth functioning of the department and provide valuable
-          support to students and faculty.
-        </p>
-        <p>
-          Meet some of our esteemed faculty members:
-          <ul>
-            <li>
-              Dr. John Smith - Artificial Intelligence and Machine Learning
-            </li>
-            <li>Dr. Jane Doe - Human-Computer Interaction</li>
-            <li>Dr. Michael Johnson - Data Science and Analytics</li>
-          </ul>
-        </p>
-      </Section>
       <FacultySection></FacultySection>
       <Section>
         <h2>Academic Programs</h2>
