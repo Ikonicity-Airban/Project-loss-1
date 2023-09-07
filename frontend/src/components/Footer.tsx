@@ -19,9 +19,9 @@ export default function FooterComponent() {
           <div className="mx-0 mb-10">
             <LogoComponent />
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6 text-sm font-extralight">
+          <div className="grid grid-cols-2 gap-8 sm:mt-4 sm:grid-cols-3 sm:gap-6 font-thin">
             <div>
-              <Footer.Title title="about" className="text-white text-sm " />
+              <Footer.Title title="about" className="text-white" />
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Flowbite</Footer.Link>
                 <Footer.Link href="#">Tailwind CSS</Footer.Link>
@@ -31,7 +31,7 @@ export default function FooterComponent() {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Follow us" className="text-white text-sm" />
+              <Footer.Title title="Follow us" className="text-white" />
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Github</Footer.Link>
                 <Footer.Link href="#">Discord</Footer.Link>
@@ -41,7 +41,7 @@ export default function FooterComponent() {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Student" className="text-white text-sm" />
+              <Footer.Title title="Student" className="text-white" />
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="http://localhost:5173/login">
                   Student Information
@@ -53,7 +53,7 @@ export default function FooterComponent() {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="Legal" className="text-white text-sm" />
+              <Footer.Title title="Legal" className="text-white" />
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Privacy Policy</Footer.Link>
                 <Footer.Link href="#">Terms & Conditions</Footer.Link>

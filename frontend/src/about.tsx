@@ -44,7 +44,7 @@ const AboutPage: React.FC = () => {
           ensure the smooth functioning of the department and provide valuable
           support to students and faculty.
         </p>
-        <p>
+        <div>
           Meet some of our esteemed faculty members:
           <ul>
             <li>
@@ -53,7 +53,7 @@ const AboutPage: React.FC = () => {
             <li>Dr. Jane Doe - Human-Computer Interaction</li>
             <li>Dr. Michael Johnson - Data Science and Analytics</li>
           </ul>
-        </p>
+        </div>
       </Section>
       <FacultySection></FacultySection>
       <Section>

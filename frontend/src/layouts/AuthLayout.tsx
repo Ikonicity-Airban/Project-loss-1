@@ -1,43 +1,49 @@
 import { Card, Tooltip } from "flowbite-react";
+import { FaKey, FaQuestionCircle } from "react-icons/fa";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
-import { FaKey, FaQuestionCircle } from "react-icons/fa";
+import { BreadcrumbComponents } from "../components";
 import LoginPage from "../pages/login";
 
 export function LoginLayout() {
   return (
-    <main className="flex flex-col items-center justify-center space-y-5 my-9 p-2 relative">
-      <div className="absolute left-[10%] -top-2 flex items-center gap-3">
-        <FaQuestionCircle />
-        <Tooltip
-          trigger="hover"
-          content={
-            <>
-              <span>
-                This Login is for all users just fill in your credentials"
-              </span>
-            </>
-          }
-          className="absolute min-w-[300px]"
-        >
-          <span className="cursor">Help</span>
-        </Tooltip>
-      </div>{" "}
-      <LoginPage />
-      <Card className="w-full max-w-sm">
-        <h5 className="text-center space-y-4 ">Don't have an account?</h5>
-        <div className="text-gray-600 dark:text-gray-400 flex mx-auto space-x-2">
-          <FaKey />
-          <Link
-            to="/create-account/student"
-            preventScrollReset={false}
-            className="logo-clipped"
+    <div className="container">
+      <BreadcrumbComponents />
+      <main className="flex flex-col items-center justify-center space-y-5 my-9 p-2 relative">
+        <div className="absolute left-[10%] -top-2 flex items-center gap-3">
+          <FaQuestionCircle />
+          <Tooltip
+            trigger="hover"
+            content={
+              <>
+                <span>
+                  This Login is for all users just fill in your credentials"
+                </span>
+              </>
+            }
+            className="absolute min-w-[300px]"
           >
-            Sign up now
-          </Link>
-        </div>
-      </Card>
-    </main>
+            <span className="cursor">Help</span>
+          </Tooltip>
+        </div>{" "}
+        <LoginPage />
+        <Card className="w-full max-w-sm">
+          <h5 className="text-center space-y-4 text-sm">
+            Don't have an account?
+          </h5>
+          <div className="text-gray-600 dark:text-gray-400 flex mx-auto space-x-2">
+            <FaKey />
+            <Link
+              to="/create-account/student"
+              preventScrollReset={false}
+              className="logo-clipped"
+            >
+              Sign up now
+            </Link>
+          </div>
+        </Card>
+      </main>
+    </div>
   );
 }
 export function SignUpLayout() {
@@ -87,7 +93,9 @@ export function SignUpLayout() {
       </div>
       <Outlet />
       <Card className="w-full max-w-md">
-        <h5 className="text-center space-y-4">Already have an account?</h5>
+        <h5 className="text-center text-sm space-y-4">
+          Already have an account?
+        </h5>
         <div className="text-gray-500 dark:text-gray-400 flex mx-auto space-x-2">
           <FaKey />
           <Link to="/login" className="logo-clipped">

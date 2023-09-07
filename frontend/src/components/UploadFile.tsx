@@ -1,8 +1,8 @@
-import { Button, FileInput, Label } from "flowbite-react";
+import { FileInput, Label } from "flowbite-react";
 import React, { ChangeEvent, useState } from "react";
 
 interface FileUploadProps {
-  onFileUpload: (file: File, dataURI: string) => void;
+  onFileUpload: (dataURI: string) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
@@ -10,21 +10,23 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setSelectedFile(file || null);
+
+    setSelectedFile(() => file || null);
+
+    handleUpload(file);
   };
 
-  const handleUpload = () => {
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataURI = reader.result as string;
-        // Save the file to local storage (you can use other storage options as well)
+  const handleUpload = (file: File | undefined) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataURI = reader.result as string;
+      // Save the file to local storage (you can use other storage options as well)
 
-        // Pass the file and data URI to the parent component for further processing
-        onFileUpload(selectedFile, dataURI);
-      };
-      reader.readAsDataURL(selectedFile);
-    }
+      // Pass the file and data URI to the parent component for further processing
+      onFileUpload(dataURI);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -33,19 +35,12 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
         {selectedFile?.name || "Click to choose a upload a pdf file"}
       </Label>
       <FileInput
+        required
         id="upload"
         className="outline-none hidden"
         accept=".pdf"
         onChange={handleFileChange}
       />
-      <Button
-        type="button"
-        gradientDuoTone="greenToBlue"
-        onClick={handleUpload}
-        disabled={!selectedFile}
-      >
-        Upload
-      </Button>
     </div>
   );
 };

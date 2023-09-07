@@ -32,10 +32,10 @@ async function CreateAssignment(req, res) {
   const { userId } = res.locals.user;
   if (!assignmentFields) throw new BadRequestError("No fields provided");
   const instructor = await Instructor.findById(userId);
-  const newAssigment = await Assignment.create(assignmentFields);
-  instructor.assignments.push(newAssigment._id);
+  const newAssignment = await Assignment.create(assignmentFields);
+  instructor.assignments.push(newAssignment._id);
 
-  res.status(200).json(newAssigment);
+  res.status(200).json(newAssignment);
 }
 
 async function UpdateOneAssignment(req, res) {

@@ -11,6 +11,7 @@ import App from "./App";
 import AssignmentPage from "./pages/student/assignment";
 import ContactPage from "./contact";
 import CoursePage from "./pages/admin/courses";
+import ErrorPage from "./pages/error";
 import { HomePage } from "./components";
 import InstructorAssignmentPage from "./pages/instructor/assignment";
 import InstructorDashboard from "./pages/instructor/Dashboard";
@@ -18,6 +19,7 @@ import MainLayout from "./layouts/MainLayout";
 import NewsPage from "./pages/news";
 import ResultPage from "./pages/student/result";
 import SignUpPage from "./pages/signup";
+import StaffPage from "./pages/staff";
 import StudentCoursesPage from "./pages/student/courses";
 import StudentDashboard from "./pages/student/Dashboard";
 import StudentProfilePage from "./pages/student/profile";
@@ -31,6 +33,7 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <MainLayout />,
+        errorElement: <ErrorPage />,
         children: [
           {
             path: "",
@@ -48,11 +51,16 @@ const router = createBrowserRouter([
             path: "about-us",
             element: <AboutPage />,
           },
+          {
+            path: "staff",
+            element: <StaffPage />,
+          },
         ],
       },
       {
         path: "",
         element: <MainLayout></MainLayout>,
+        errorElement: <ErrorPage />,
         children: [
           {
             path: "login",
@@ -77,6 +85,7 @@ const router = createBrowserRouter([
       {
         path: "/student",
         element: <StudentLayout />,
+        errorElement: <ErrorPage />,
         children: [
           {
             path: "",
@@ -103,7 +112,7 @@ const router = createBrowserRouter([
       {
         path: "/instructor",
         element: <InstructorLayout />,
-        errorElement: <div>Error</div>,
+        errorElement: <ErrorPage />,
         children: [
           {
             path: "",
@@ -118,6 +127,7 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: <AdminLayout />,
+        errorElement: <ErrorPage />,
         children: [
           {
             path: "",

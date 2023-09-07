@@ -13,7 +13,7 @@
   box-sizing: border-box;
   font-size: 14px;
   line-height: 1.5rem;
-  font-family: "Montserrat", Verdana, Geneva, Tahoma, sans-serif;
+  font-family: "Poppins", "Montserrat", Verdana, Geneva, Tahoma, sans-serif;
 }
 
 html {
@@ -22,6 +22,7 @@ html {
 h1 {
   font-size: 3em;
   line-height: 1.2;
+  font-weight: bolder;
 }
 h2 {
   font-size: 2.2em;

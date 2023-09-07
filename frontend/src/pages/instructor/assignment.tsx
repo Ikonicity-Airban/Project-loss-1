@@ -1,5 +1,13 @@
-import { Button, Label, ListGroup, TextInput } from "flowbite-react";
+import {
+  Button,
+  Label,
+  ListGroup,
+  Select,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { FaBook, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
 import { AppContext } from "../../api/context";
@@ -12,26 +20,16 @@ import { TypeEditInfo } from "@inovua/reactdatagrid-community/types";
 import { Types } from "../../api/reducer";
 import { toast } from "react-hot-toast";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import useLocalStorage from "../../api/hooks/useLocalStorage";
 
 function InstructorAssignmentPage() {
   const http = useAxiosPrivate();
   const { handleSubmit, register, reset } = useForm<IAssignment>();
 
-  const [PDFFiles, setPDFFiles] = useLocalStorage<
-    { title: string; pdfURI: string }[]
-  >("assigment", [
-    {
-      title: "assignment1",
-      pdfURI: "data:pdf/",
-    },
-  ]);
+  const [file, setFile] = useState<string>("");
 
-  const handleUpload = (file: File, dataURI: string) => {
-    PDFFiles.push({ title: file.name, pdfURI: dataURI });
-    setPDFFiles(PDFFiles);
+  const handleUpload = (dataURI: string) => {
+    setFile(dataURI);
   };
 
   const { dispatch } = useContext(AppContext);
@@ -68,10 +66,6 @@ function InstructorAssignmentPage() {
 
   const createMutation = useMutation("assignments", createCourse, {
     onSuccess: (data) => {
-      console.log(
-        "🚀 ~ file: assignment.tsx:71 ~ InstructorAssignmentPage ~ data:",
-        data
-      );
       toast.success("Created successfully");
       reset();
     },
@@ -102,7 +96,7 @@ function InstructorAssignmentPage() {
     dispatch({
       type: Types.open,
       payload: {
-        header: "Register Course",
+        header: "Create and assignment",
         buttonOK: "Submit",
         content: <RegisterForm />,
         onOk: () => {
@@ -112,13 +106,6 @@ function InstructorAssignmentPage() {
     });
     reset(course);
   };
-
-  function handleTableEdit(editInfo: TypeEditInfo) {
-    console.log(
-      "🚀 ~ file: assignment.tsx:81 ~ handleTableEdit ~ editInfo:",
-      editInfo
-    );
-  }
 
   const handleDelete = (id: string) => {
     deleteMutation.mutate(id);
@@ -142,9 +129,9 @@ function InstructorAssignmentPage() {
   ];
 
   const RegisterForm = () => (
-    <form action="" className="w-full p-3" onSubmit={handleSubmit(onSubmit)}>
+    <form action="" className="w-full " onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap gap-4 mx-auto w-full items-center">
-        <div className="relative w-full max-w-screen-smallScreens">
+        <div className="relative w-full ">
           <div className="mb-2 block ">
             <Label htmlFor="">Assignment Title</Label>
           </div>
@@ -159,22 +146,28 @@ function InstructorAssignmentPage() {
             {...register("title")}
           />
         </div>
-        <div className="relative w-full max-w-screen-smallScreens">
+        <div className="relative w-full ">
           <div className="mb-2 block ">
             <Label htmlFor="">Assignment Description</Label>
           </div>
-          <span className="absolute z-10 right-4 bottom-[20%] text-gray-500">
-            <FaBook></FaBook>
-          </span>
-          <TextInput
+          <Textarea
             required
-            className="placeholder:capitalize placeholder:mx-10"
+            className="placeholder:capitalize placeholder:mx-10 h-28"
             id="ass_title"
             // placeholder={label}
             {...register("description")}
           />
         </div>
-        <div className="relative w-full max-w-screen-smallScreens">
+        <div className="relative w-full ">
+          <Select defaultValue={100} required {...register("level")}>
+            {[100, 200, 300, 400].map((level) => (
+              <option value={level} key={level}>
+                {level}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="relative w-full ">
           <FileUpload onFileUpload={handleUpload} />
         </div>
       </div>
@@ -182,9 +175,9 @@ function InstructorAssignmentPage() {
         <Button
           type="submit"
           className="w-full"
+          disabled={!file}
           isProcessing={createMutation.isLoading}
           gradientDuoTone="greenToBlue"
-          onClick={handleUpload}
         >
           Upload Assignment
         </Button>
@@ -207,7 +200,6 @@ function InstructorAssignmentPage() {
             style={{
               minHeight: 500,
             }}
-            onEditComplete={handleTableEdit}
             pagination
             defaultLimit={10}
           />

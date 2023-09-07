@@ -1,13 +1,14 @@
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 import { CustomError, ILoginResponse } from "../../api/@types";
-import { FaEnvelope, FaExclamationCircle, FaLock } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AppContext } from "../../api/context";
+import { FaExclamationCircle } from "react-icons/fa";
 import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
 import https from "../../api/https";
+import { loginFormFields } from "../../api/resource/fields";
 import { useContext } from "react";
 import { useMutation } from "react-query";
 import { useState } from "react";
@@ -16,19 +17,6 @@ interface IFormInput {
   email: string;
   password: string;
 }
-
-const formFields = [
-  {
-    name: "email",
-    label: "Email",
-    icon: <FaEnvelope />,
-  },
-  {
-    name: "password",
-    label: "Password",
-    icon: <FaLock />,
-  },
-];
 
 function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
@@ -95,7 +83,7 @@ function LoginPage() {
       </span>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {formFields.map(({ name, label, icon }) => (
+        {loginFormFields.map(({ name, label, icon }) => (
           <div key={name} className="relative">
             <div className="mb-2 block ">
               <Label htmlFor={name}>{label}</Label>
