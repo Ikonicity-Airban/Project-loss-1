@@ -1,16 +1,15 @@
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import { CustomError, ILoginResponse } from "../../api/@types";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AppContext } from "../../api/context";
 import { FaExclamationCircle } from "react-icons/fa";
+import { ILoginResponse } from "../../api/@types";
 import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
 import https from "../../api/https";
 import { loginFormFields } from "../../api/resource/fields";
 import { useContext } from "react";
-import { useMutation } from "react-query";
 import { useState } from "react";
 
 interface IFormInput {
@@ -20,56 +19,51 @@ interface IFormInput {
 
 function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
+  const [isLoading, setIsLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const { state } = useLocation();
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
 
-  const { mutate, isLoading, isError } = useMutation(
-    "login",
-    async (formData: IFormInput) => {
+  const loginMutation = async (formData: IFormInput) => {
+    setIsLoading(true);
+    try {
       const response = await https.post<ILoginResponse>("/login", formData);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        dispatch({
-          type: Types.login,
-          payload: data,
-        });
-        const role = data.tokenUser.role;
-        return navigate(`/${role}`, {
-          replace: true,
-        });
-      },
-      onError: (error: CustomError) => {
-        dispatch({
-          type: Types.open,
-          payload: {
-            buttonOK: "OK",
-            header: "Error",
-            onOk: function () {
-              console.log(error);
-            },
-            content: (
-              <div className="text-red-700 dark:text-yellow-600 p-6 flex items-center">
-                <FaExclamationCircle className="text-6xl flex-[0.3]" />
-                <p className="my-3 flex-[2]">{error.response.data.msg}</p>
-              </div>
-            ),
-            type: "Error",
+      const data = response.data;
+      dispatch({
+        type: Types.login,
+        payload: data,
+      });
+      const role = data.tokenUser.role;
+      return navigate(`/${role}`, {
+        replace: true,
+      });
+    } catch (error: CustomError) {
+      dispatch({
+        type: Types.open,
+        payload: {
+          buttonOK: "OK",
+          header: "Error",
+          onOk: function () {
+            console.log(error);
           },
-        });
-        throw error;
-      },
-
-      // useErrorBoundary: true,
+          content: (
+            <div className="text-red-700 dark:text-yellow-600 p-6 flex items-center">
+              <FaExclamationCircle className="text-6xl flex-[0.3]" />
+              <p className="my-3 flex-[2]">{error.response.data.msg}</p>
+            </div>
+          ),
+          type: "Error",
+        },
+      });
+    } finally {
+      setIsLoading(false);
     }
-  );
+  };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    mutate(data);
+    loginMutation(data);
   };
 
   //return
@@ -119,8 +113,8 @@ function LoginPage() {
           gradientDuoTone={"greenToBlue"}
           className="w-full"
           type="submit"
-          disabled={isError || isLoading}
-          isProcessing={isError || isLoading}
+          disabled={isLoading}
+          isProcessing={isLoading}
         >
           Submit
         </Button>

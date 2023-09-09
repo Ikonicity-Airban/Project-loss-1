@@ -7,10 +7,12 @@ import LoginPage from "../pages/login";
 
 export function LoginLayout() {
   return (
-    <div className="container">
-      <BreadcrumbComponents />
+    <div className="max-w-screen-desktop mx-auto">
+      <div className="m-6">
+        <BreadcrumbComponents />
+      </div>
       <main className="flex flex-col items-center justify-center space-y-5 my-9 p-2 relative">
-        <div className="absolute left-[10%] -top-2 flex items-center gap-3">
+        <div className="absolute left-[10%] -top-2 md:left-[37%] flex items-center gap-3">
           <FaQuestionCircle />
           <Tooltip
             trigger="hover"

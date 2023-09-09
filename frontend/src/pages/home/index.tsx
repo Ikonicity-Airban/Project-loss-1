@@ -64,8 +64,8 @@ export default function HomeComponent() {
             dedicated to providing students with a comprehensive and engaging
             education that prepares them for success in their chosen careers.
           </p>
-        </Section>{" "}
-        <Section title="What We Offer?">
+        </Section>
+        <Section subtitle="What We Offer?">
           <p className="text-base leading-loose">
             We offer a range of programs and courses that are designed to meet
             the needs of students at all levels, from undergraduate to graduate

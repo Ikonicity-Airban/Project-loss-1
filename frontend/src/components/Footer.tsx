@@ -14,7 +14,7 @@ export default function FooterComponent() {
       container
       className="text-sm bg-gradient-to-t from-blue-950 to-green-900 text-white "
     >
-      <div className="w-full max-w-screen-laptop mx-auto">
+      <div className="w-full max-w-screen-desktop mx-auto">
         <div className="">
           <div className="mx-0 mb-10">
             <LogoComponent />

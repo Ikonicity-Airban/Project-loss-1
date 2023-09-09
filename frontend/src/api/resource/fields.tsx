@@ -12,3 +12,15 @@ export const loginFormFields = [
     icon: <FaLock />,
   },
 ];
+export const signUpFormFields = [
+  {
+    name: "email",
+    label: "Email",
+    icon: <FaEnvelope />,
+  },
+  {
+    name: "password",
+    label: "Password",
+    icon: <FaLock />,
+  },
+];
