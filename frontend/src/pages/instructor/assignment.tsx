@@ -7,7 +7,8 @@ import {
   Textarea,
 } from "flowbite-react";
 import { FaBook, FaPen, FaPlus, FaTrash } from "react-icons/fa";
-import { useContext, useState } from "react";
+import { Types, defaultInstructor } from "../../api/reducer";
+import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
 import { AppContext } from "../../api/context";
@@ -16,27 +17,29 @@ import { IAssignment } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
-import { TypeEditInfo } from "@inovua/reactdatagrid-community/types";
-import { Types } from "../../api/reducer";
 import { toast } from "react-hot-toast";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 import { useForm } from "react-hook-form";
+import useLocalStorage from "../../api/hooks/useLocalStorage";
 
 function InstructorAssignmentPage() {
   const http = useAxiosPrivate();
   const { handleSubmit, register, reset } = useForm<IAssignment>();
-
+  const { dispatch } = useContext(AppContext);
+  const [instructor] = useLocalStorage("instructor", defaultInstructor);
   const [file, setFile] = useState<string>("");
+
+  useEffect(() => {
+    reset();
+  }, [dispatch, reset]);
 
   const handleUpload = (dataURI: string) => {
     setFile(dataURI);
   };
 
-  const { dispatch } = useContext(AppContext);
-
   const fetchAssignment = async (): Promise<{
     count: number;
-    assignment: IAssignment[];
+    assignments: IAssignment[];
   }> => {
     const response = await http.get(`/assignments`);
     return response.data;
@@ -61,9 +64,8 @@ function InstructorAssignmentPage() {
 
   const { data, isLoading } = useQuery<{
     count: number;
-    assignment: IAssignment[];
+    assignments: IAssignment[];
   }>("assignments", fetchAssignment);
-
   const createMutation = useMutation("assignments", createCourse, {
     onSuccess: (data) => {
       toast.success("Created successfully");
@@ -85,10 +87,11 @@ function InstructorAssignmentPage() {
   });
 
   const onSubmit = (data: IAssignment) => {
+    const assignment = { ...data, file, instructor: instructor._id };
     if (data._id) {
-      updateMutation.mutate(data);
+      updateMutation.mutate(assignment);
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(assignment);
     }
   };
 
@@ -99,22 +102,28 @@ function InstructorAssignmentPage() {
         header: "Create and assignment",
         buttonOK: "Submit",
         content: <RegisterForm />,
-        onOk: () => {
-          return;
-        },
       },
     });
     reset(course);
   };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id);
+    dispatch({
+      type: Types.open,
+      payload: {
+        type: "Error",
+        header: "Create and assignment",
+        buttonOK: "OK",
+        content: <p>Do you want to delete this assignment</p>,
+        onOk: () => deleteMutation.mutate(id),
+      },
+    });
   };
 
   const columns: TypeColumns = [
     { name: "_id", header: "ID", defaultWidth: 80, defaultFlex: 1 },
-    { name: "title", header: "Course Name", defaultFlex: 1 },
-    { name: "code", header: "Course Code", defaultFlex: 1 },
+    { name: "title", header: "Title", defaultFlex: 1 },
+    { name: "description", header: "Description", defaultFlex: 1 },
     {
       name: "actions",
       header: "actions",
@@ -122,7 +131,7 @@ function InstructorAssignmentPage() {
       render: ({ data }) => (
         <div className="flex items-center gap-4 justify-around p-2">
           <FaPen onClick={() => handleEdit(data)} />
-          <FaTrash onClick={() => handleDelete(data.id)} />
+          <FaTrash onClick={() => handleDelete(data._id)} />
         </div>
       ),
     },
@@ -159,10 +168,26 @@ function InstructorAssignmentPage() {
           />
         </div>
         <div className="relative w-full ">
-          <Select defaultValue={100} required {...register("level")}>
+          <Select
+            defaultValue={100}
+            required
+            placeholder="select a level"
+            {...register("level")}
+          >
+            <option disabled>Select a level</option>
             {[100, 200, 300, 400].map((level) => (
               <option value={level} key={level}>
                 {level}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="relative w-full ">
+          <Select defaultValue={100} required {...register("course")}>
+            <option disabled>Select a course</option>
+            {instructor.coursesTeaching?.map((course) => (
+              <option value={course._id} key={course._id}>
+                {course.title} - {course.code}
               </option>
             ))}
           </Select>
@@ -193,7 +218,7 @@ function InstructorAssignmentPage() {
           </Button>
           <ReactDataGrid
             idProperty="id"
-            dataSource={data?.assignment || []}
+            dataSource={data?.assignments || []}
             columns={columns}
             loading={isLoading}
             editable={true}

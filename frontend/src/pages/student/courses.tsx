@@ -24,6 +24,11 @@ function StudentCoursesPage() {
     }
   );
 
+  console.log(
+    "🚀 ~ file: courses.tsx:20 ~ StudentCoursesPage ~ userInfo:",
+    userInfo
+  );
+
   return (
     <main className="my-10">
       <ListGroup>

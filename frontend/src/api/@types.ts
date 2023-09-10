@@ -55,6 +55,7 @@ export type IDepartment = {
 export type IAssignment = {
   title?: string;
   file?: string;
+  instructor?: string;
   level?: 100 | 200 | 300 | 400;
   description?: string;
   course?: ICourse["title"];
@@ -86,7 +87,7 @@ export type CustomError = {
 };
 
 export type IModal = {
-  type?: "Success" | "Error" | string;
+  type?: "Success" | "Error" | "Default";
   show?: boolean;
   header?: string;
   content?: ReactNode;

@@ -211,11 +211,11 @@ export const InstructorLayout = () => {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  useEffect(() => {
-    if (!instructor.userId) {
-      navigate("/login");
-    }
-  });
+  // useEffect(() => {
+  //   if (!instructor.userId) {
+  //     navigate("/login");
+  //   }
+  // });
 
   return (
     <>

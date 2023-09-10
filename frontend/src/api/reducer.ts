@@ -43,7 +43,8 @@ export const defaultStudent = {
   role: "student",
 };
 export const defaultInstructor: IInstructor = {
-  name: "John",
+  firstName: "John",
+  lastName: "Doe",
   assignment: [],
   department: "Computer Science",
 };

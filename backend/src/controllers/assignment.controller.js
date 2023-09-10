@@ -10,10 +10,12 @@ async function GetAllAssignment(req, res) {
   if (course) query.course = course;
   if (instructor) query.instructor = instructor;
 
-  const assignments = await Assignment.find(query).populate("lecturer course");
+  const assignments = await Assignment.find(query).populate(
+    "instructor course"
+  );
   if (!assignments) throw new NotFoundError("No assignments");
 
-  res.status(200).json(assignments);
+  res.status(200).json({ count: assignments.length, assignments });
 }
 
 async function GetOneAssignment(req, res) {
@@ -29,9 +31,10 @@ async function GetOneAssignment(req, res) {
 
 async function CreateAssignment(req, res) {
   const assignmentFields = req.body;
-  const { userId } = res.locals.user;
+
   if (!assignmentFields) throw new BadRequestError("No fields provided");
-  const instructor = await Instructor.findById(userId);
+  const instructor = await Instructor.findById(req.body.instructor);
+
   const newAssignment = await Assignment.create(assignmentFields);
   instructor.assignments.push(newAssignment._id);
 

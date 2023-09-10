@@ -12,7 +12,7 @@ function MainLayout() {
           name="description"
           content="A home of computer geniuses and greater minds"
         />
-        <title>CSDP | {path.split("/")[1].split("-").join(" ")}</title>
+        <title>CSDP | {path.split("/")[1].split("-").join(" ") || "Home"}</title>
       </Helmet>{" "}
       {/* header */}
       <NavbarComponent />

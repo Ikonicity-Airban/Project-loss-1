@@ -8,15 +8,8 @@ interface FileUploadProps {
 const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    setSelectedFile(() => file || null);
-
-    handleUpload(file);
-  };
-
   const handleUpload = (file: File | undefined) => {
+    console.log("🚀 ~ file: UploadFile.tsx:12 ~ handleUpload ~ file:", file);
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
@@ -25,8 +18,20 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
 
       // Pass the file and data URI to the parent component for further processing
       onFileUpload(dataURI);
+      console.log(
+        "🚀 ~ file: UploadFile.tsx:21 ~ handleUpload ~ dataURI:",
+        dataURI
+      );
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    setSelectedFile(() => file || null);
+
+    handleUpload(file);
   };
 
   return (
@@ -37,6 +42,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
       <FileInput
         required
         id="upload"
+        name="file"
         className="outline-none hidden"
         accept=".pdf"
         onChange={handleFileChange}

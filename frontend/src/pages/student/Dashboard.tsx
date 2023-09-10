@@ -1,9 +1,8 @@
 import { Card, ListGroup, Progress } from "flowbite-react";
-import { IAssignment, IStudent } from "../../api/@types";
-import { assignmentColumns, courseColumns } from "../../api/resource/columns";
+import { IStudent } from "../../api/@types";
+import { assignmentColumns } from "../../api/resource/columns";
 
 import { AxiosResponse } from "axios";
-import Heading from "../../components/Heading";
 import { Helmet } from "react-helmet";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
@@ -35,20 +34,7 @@ function StudentDashboard() {
     "student",
     async () => await http.get("/students/my-profile")
   );
-  /* {
-      onSuccess: ({ data }) => {
-        dispatch({
-          type: Types.open,
-          payload: {
-            type: "Success",
-            show: true,
-            header: "Hello",
-            content: <>Welcome {data?.firstName}</>,
-            buttonOK: "OK",
-          },
-        });
-      },
-    } */
+
 
   const cards = useMemo(
     () => [

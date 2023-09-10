@@ -8,12 +8,16 @@ const assignmentRoutes = require("./assignment.routes");
 const { deserializeUser } = require("../utils/users");
 const { authenticateUser } = require("../middlewares/auth");
 const { GetAllCourses } = require("../controllers/course.controller");
+const { GetAllEvents } = require("../controllers/events.controller");
+const eventRouter = require("./event.routes");
 
 mainRouter.use("/", authRoutes);
 mainRouter.get("/courses", GetAllCourses);
+mainRouter.get("/events", GetAllEvents);
 mainRouter.use([deserializeUser, authenticateUser]);
 mainRouter.use("/courses", courseRoutes);
-mainRouter.use("/courses", instructorRoutes);
+// mainRouter.use("/courses", instructorRoutes);
+mainRouter.get("/events", eventRouter);
 mainRouter.use("/students", studentRoutes);
 mainRouter.use("/instructors", instructorRoutes);
 mainRouter.use("/department", departmentRoutes);

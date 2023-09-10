@@ -31,8 +31,9 @@ async function RegisterCourse(req, res) {
   if (!course) throw new NotFoundError("No course with the Id " + courseId);
 
   const alreadyRegister = student.coursesOffered.find(
-    (course) => course.toString() == courseId
+    (course) => course.toString() == courseId.toString()
   );
+
   if (alreadyRegister) throw new BadRequestError("You have already registered");
   student.coursesOffered.push(courseId);
   student.save();

@@ -15,7 +15,7 @@ assignmentRouter
   .post(authorizeRoles("admin", "instructor"), CreateAssignment);
 
 assignmentRouter
-  .route("/assignmentId")
+  .route("/:assignmentId")
   .get(GetOneAssignment)
   .patch(UpdateOneAssignment)
   .delete(DeleteOneAssignment);
