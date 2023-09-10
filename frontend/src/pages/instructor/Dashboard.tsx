@@ -1,6 +1,7 @@
+import { IAssignment, IInstructor } from "../../api/@types";
+
 import { AxiosResponse } from "axios";
 import { Helmet } from "react-helmet";
-import { IInstructor } from "../../api/@types";
 import { ListGroup } from "flowbite-react";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
@@ -17,11 +18,21 @@ function InstructorDashboard() {
 
   const { data: assignment, isLoading } = useQuery(
     "assignments",
-    async () => await http.get("/assignments"),
+    async (): Promise<{
+      count: number;
+      assignments: IAssignment[];
+    }> => {
+      const response = await http.get(`/assignments`);
+      return response.data;
+    },
     {
       cacheTime: 3600000,
       refetchInterval: 3600000,
     }
+  );
+  console.log(
+    "🚀 ~ file: Dashboard.tsx:20 ~ InstructorDashboard ~ data:",
+    assignment
   );
   const { data: userInfo } = useQuery<AxiosResponse<IInstructor>>(
     "instructor",
@@ -54,7 +65,7 @@ function InstructorDashboard() {
               }}
               loading={isLoading}
               columns={assignmentColumns}
-              dataSource={assignment?.data || []}
+              dataSource={assignment?.assignments || []}
             />
           </div>
         </Section>

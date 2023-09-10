@@ -1,4 +1,5 @@
 import { Button } from "flowbite-react";
+import { FaDownload } from "react-icons/fa";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
 
 export const courseColumns: TypeColumns = [
@@ -40,20 +41,40 @@ export const assignmentColumns: TypeColumns = [
   {
     name: "_id",
     header: "Id",
-    defaultVisible: false,
-    type: "number",
-    defaultWidth: 40,
+    defaultFlex: 1,
   },
   { name: "title", defaultFlex: 1, header: "Title" },
   {
-    name: "description",
     defaultFlex: 1,
+    name: "description",
     header: "Description",
     // render: ({ value }) => (flags[value] ? flags[value] : value),
   },
-  { name: "Course", defaultFlex: 1, header: "course" },
-  { name: "Date", defaultFlex: 1, type: "date", header: "Date" },
-  { name: "Action", defaultWidth: 100, header: "Action" },
+  { name: "course", defaultFlex: 1, header: "Course" },
+  {
+    name: "file",
+    header: "File",
+    render: ({ value }) => {
+      const [fullMatch, mimeType, base64Data] = value.match(
+        /^data:(.+);base64,(.+)$/
+      );
+      let fileName = "assignment.pdf";
+
+      const nameRegex = /filename=([^;]*)/;
+      const nameMatch = mimeType.match(nameRegex);
+      if (nameMatch && nameMatch.length > 1) {
+        fileName = nameMatch[1];
+      }
+
+      return (
+        <center>
+          <a href={value} download={fileName}>
+            <FaDownload />
+          </a>
+        </center>
+      );
+    },
+  },
 ];
 
 export const resultColumns: TypeColumns = [

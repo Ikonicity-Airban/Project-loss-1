@@ -1,7 +1,7 @@
 import "../App.css";
 
 import { Avatar, Dropdown, Navbar, Sidebar } from "flowbite-react";
-import { FaBookOpen, FaBoxOpen, FaDiceFour, FaReceipt } from "react-icons/fa";
+import { FaBookOpen, FaBoxOpen, FaDiceFour, FaNewspaper, FaReceipt } from "react-icons/fa";
 import { IInstructor, IStudent } from "../api/@types";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Types, defaultInstructor, defaultStudent } from "../api/reducer";
@@ -22,6 +22,7 @@ const studentSideLinks = [
 const instructorSideLinks = [
   { name: "Dashboard", link: "", icon: <FaDiceFour /> },
   { name: "Assignment", link: "assignment", icon: <FaBoxOpen /> },
+  { name: "Events", link: "events", icon: <FaNewspaper /> },
 ];
 
 export const StudentLayout = () => {

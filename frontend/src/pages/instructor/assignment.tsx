@@ -6,7 +6,7 @@ import {
   TextInput,
   Textarea,
 } from "flowbite-react";
-import { FaBook, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { FaBook, FaDownload, FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import { Types, defaultInstructor } from "../../api/reducer";
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
@@ -124,6 +124,30 @@ function InstructorAssignmentPage() {
     { name: "_id", header: "ID", defaultWidth: 80, defaultFlex: 1 },
     { name: "title", header: "Title", defaultFlex: 1 },
     { name: "description", header: "Description", defaultFlex: 1 },
+    {
+      name: "file",
+      header: "File",
+      render: ({ value }) => {
+        const [fullMatch, mimeType, base64Data] = value.match(
+          /^data:(.+);base64,(.+)$/
+        );
+        let fileName = "assignment.pdf";
+
+        const nameRegex = /filename=([^;]*)/;
+        const nameMatch = mimeType.match(nameRegex);
+        if (nameMatch && nameMatch.length > 1) {
+          fileName = nameMatch[1];
+        }
+
+        return (
+          <center>
+            <a href={value} download={fileName}>
+              <FaDownload />
+            </a>
+          </center>
+        );
+      },
+    },
     {
       name: "actions",
       header: "actions",

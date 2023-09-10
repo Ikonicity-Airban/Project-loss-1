@@ -122,6 +122,10 @@ const router = createBrowserRouter([
             path: "assignment",
             element: <InstructorAssignmentPage />,
           },
+          {
+            path: "events",
+            element: <AssignmentPage />,
+          },
         ],
       },
       {
