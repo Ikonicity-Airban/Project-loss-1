@@ -2,7 +2,11 @@ const { StatusCodes } = require("http-status-codes");
 const User = require("../models/user.model");
 const Student = require("../models/student.model");
 const Instructor = require("../models/instructor.model");
-const { signTokens } = require("../utils/jwt");
+const {
+  signTokens,
+  verifyRefreshToken,
+  signAccessToken,
+} = require("../utils/jwt");
 const { createTokenUser } = require("../utils/users");
 
 const {
@@ -83,8 +87,13 @@ function Logout(req, res, next) {
   res.sendStatus(StatusCodes.OK);
 }
 
+function GetRefreshToken() {
+  res.status(200);
+}
+
 module.exports = {
   Login,
   Logout,
   CreateAccount,
+  GetRefreshToken,
 };

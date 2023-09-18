@@ -78,16 +78,16 @@ const AssignmentPage = () => {
     }
   };
 
-  const handleEdit = (course: IAssignment) => {
+  const handleEdit = (assignment) => {
     dispatch({
       type: Types.open,
       payload: {
-        header: "Register Course",
+        header: "Register assignment",
         buttonOK: "Submit",
         content: <RegisterForm />,
       },
     });
-    reset(course);
+    reset(assignment);
   };
 
   function handleTableEdit(editInfo: TypeEditInfo) {

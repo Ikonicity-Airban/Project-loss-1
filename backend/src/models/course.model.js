@@ -16,11 +16,7 @@ const CourseSchema = new Schema(
     },
 
     description: { type: String },
-    department: {
-      type: Schema.Types.ObjectId,
-      ref: "Department",
-      required: true,
-    },
+
     instructor: {
       type: Schema.Types.ObjectId,
       ref: "Instructor",
@@ -45,15 +41,7 @@ CourseSchema.virtual("students", {
   foreignField: "coursesOffered",
 });
 
-CourseSchema.pre("save", async function () {
-  const department = await Department.findOne({ name: "Computer Science" });
-  if (department) this.department = department._id;
-  const instructor = await Department.findById(this.instructor);
-  if (instructor) {
-    instructor.coursesOffered.push(this);
-  } else throw new Error("No Department for this course");
-});
-
+CourseSchema.pre;
 const Course = model("Course", CourseSchema);
 
 module.exports = Course;

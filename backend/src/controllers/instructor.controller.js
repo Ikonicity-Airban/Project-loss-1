@@ -11,8 +11,13 @@ const {
 // Get all available instructors
 async function GetAllInstructors(req, res) {
   const instructors = await Instructor.find({})
-    .populate("coursesOffered")
+    .populate("courseTeaching", "-createdAt -updatedAt")
+    .populate("userId", "-createdAt -updatedAt -__v")
     .lean();
+  console.log(
+    "🚀 ~ file: instructor.controller.js:16 ~ GetAllInstructors ~ instructors:",
+    instructors
+  );
   res.status(StatusCodes.OK).json({ instructors, count: instructors.length });
 }
 
@@ -20,8 +25,8 @@ async function GetAllInstructors(req, res) {
 async function GetOneInstructorStats(req, res) {
   const { instructorId } = req.params;
   const { role, userId } = res.locals.user;
-  if (!(role == "admin" || role == "instructor" || instructorId == userId))
-    throw new UnauthenticatedError("You are not authorized");
+  if (!(role == "admin" || instructorId == userId))
+    throw new UnauthenticatedError("You are not authorized, admins only");
 
   const instructor = await Instructor.findById(instructorId).lean();
   if (!instructor) throw new NotFoundError("instructor Not found");

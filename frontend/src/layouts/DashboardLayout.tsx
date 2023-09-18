@@ -1,7 +1,13 @@
 import "../App.css";
 
 import { Avatar, Dropdown, Navbar, Sidebar } from "flowbite-react";
-import { FaBookOpen, FaBoxOpen, FaDiceFour, FaNewspaper, FaReceipt } from "react-icons/fa";
+import {
+  FaBookOpen,
+  FaBoxOpen,
+  FaDiceFour,
+  FaNewspaper,
+  FaReceipt,
+} from "react-icons/fa";
 import { IInstructor, IStudent } from "../api/@types";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Types, defaultInstructor, defaultStudent } from "../api/reducer";
@@ -177,7 +183,7 @@ export const StudentLayout = () => {
 export const InstructorLayout = () => {
   const [toggle, setToggle] = useState(false);
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const http = useAxiosPrivate();
   const { dispatch } = useContext(AppContext);
   const [instructor, setInstructor] = useLocalStorage<IInstructor>(
@@ -343,7 +349,8 @@ export const AdminLayout = () => {
           </Dropdown>
         </div>
       </Navbar>
-      <main className="min-h-screen p-4 relative mt-16 dark:bg-gray-900">
+      <main className="min-h-screen p-4 relative mt-16 dark:bg-gray-900 w-full mx-auto max-w-screen-desktop">
+        <BreadcrumbComponents />
         <Outlet />
       </main>
     </>

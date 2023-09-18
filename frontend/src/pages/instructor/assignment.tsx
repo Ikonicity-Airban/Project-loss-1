@@ -6,7 +6,14 @@ import {
   TextInput,
   Textarea,
 } from "flowbite-react";
-import { FaBook, FaDownload, FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaBook,
+  FaDownload,
+  FaGraduationCap,
+  FaPen,
+  FaPlus,
+  FaTrash,
+} from "react-icons/fa";
 import { Types, defaultInstructor } from "../../api/reducer";
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
@@ -28,14 +35,9 @@ function InstructorAssignmentPage() {
   const { dispatch } = useContext(AppContext);
   const [instructor] = useLocalStorage("instructor", defaultInstructor);
   const [file, setFile] = useState<string>("");
-
   useEffect(() => {
     reset();
   }, [dispatch, reset]);
-
-  const handleUpload = (dataURI: string) => {
-    setFile(dataURI);
-  };
 
   const fetchAssignment = async (): Promise<{
     count: number;
@@ -45,12 +47,12 @@ function InstructorAssignmentPage() {
     return response.data;
   };
 
-  const createCourse = async (data: IAssignment): Promise<IAssignment> => {
+  const createAssignment = async (data: IAssignment): Promise<IAssignment> => {
     const response = await http.post<IAssignment>(`/assignments`, data);
     return response.data;
   };
 
-  const updateCourse = async (data: IAssignment): Promise<IAssignment> => {
+  const updateAssignment = async (data: IAssignment): Promise<IAssignment> => {
     const response = await http.patch<IAssignment>(
       `/assignment/${data._id}`,
       data
@@ -58,7 +60,7 @@ function InstructorAssignmentPage() {
     return response.data;
   };
 
-  const deleteCourse = async (id: string): Promise<void> => {
+  const deleteAssignment = async (id: string): Promise<void> => {
     await http.delete(`/assignments/${id}`);
   };
 
@@ -66,28 +68,32 @@ function InstructorAssignmentPage() {
     count: number;
     assignments: IAssignment[];
   }>("assignments", fetchAssignment);
-  const createMutation = useMutation("assignments", createCourse, {
-    onSuccess: (data) => {
+  const createMutation = useMutation("assignments", createAssignment, {
+    onSuccess: () => {
       toast.success("Created successfully");
       reset();
     },
   });
 
-  const updateMutation = useMutation("assignments", updateCourse, {
+  const updateMutation = useMutation("assignments", updateAssignment, {
     onSuccess: () => {
       toast.success("Updated successfully");
       reset();
     },
   });
 
-  const deleteMutation = useMutation(deleteCourse, {
+  const deleteMutation = useMutation(deleteAssignment, {
     onSuccess: () => {
       toast.success("Deleted successfully");
     },
   });
 
   const onSubmit = (data: IAssignment) => {
-    const assignment = { ...data, file, instructor: instructor._id };
+    const assignment: IAssignment = {
+      ...data,
+      file,
+      instructor: instructor._id || "",
+    };
     if (data._id) {
       updateMutation.mutate(assignment);
     } else {
@@ -96,15 +102,27 @@ function InstructorAssignmentPage() {
   };
 
   const handleEdit = (course: IAssignment) => {
+    reset(course);
     dispatch({
       type: Types.open,
       payload: {
-        header: "Create and assignment",
+        header: "Update an assignment",
         buttonOK: "Submit",
         content: <RegisterForm />,
       },
     });
-    reset(course);
+  };
+
+  const handleCreate = () => {
+    reset();
+    dispatch({
+      type: Types.open,
+      payload: {
+        header: "Create an assignment",
+        buttonOK: "Submit",
+        content: <RegisterForm />,
+      },
+    });
   };
 
   const handleDelete = (id: string) => {
@@ -131,6 +149,7 @@ function InstructorAssignmentPage() {
         const [fullMatch, mimeType, base64Data] = value.match(
           /^data:(.+);base64,(.+)$/
         );
+        console.log(base64Data, fullMatch);
         let fileName = "assignment.pdf";
 
         const nameRegex = /filename=([^;]*)/;
@@ -206,26 +225,29 @@ function InstructorAssignmentPage() {
             ))}
           </Select>
         </div>
-        <div className="relative w-full ">
-          <Select defaultValue={100} required {...register("course")}>
-            <option disabled>Select a course</option>
-            {instructor.coursesTeaching?.map((course) => (
-              <option value={course._id} key={course._id}>
-                {course.title} - {course.code}
-              </option>
-            ))}
-          </Select>
+        <div className="w-full ">
+          <div className="mb-2 block ">
+            <Label htmlFor="course">Course</Label>
+          </div>
+          <TextInput
+            icon={FaGraduationCap}
+            required
+            disabled
+            value={instructor.courseTeaching?.title || "No course"}
+            className="placeholder:capitalize placeholder:mx-10"
+            id="course"
+            // placeholder={label}
+          />
         </div>
         <div className="relative w-full ">
-          <FileUpload onFileUpload={handleUpload} />
+          <FileUpload setFile={setFile} />
         </div>
       </div>
       <div className="relative w-full my-6">
         <Button
           type="submit"
           className="w-full"
-          disabled={!file}
-          isProcessing={createMutation.isLoading}
+          isProcessing={createMutation.isLoading || updateMutation.isLoading}
           gradientDuoTone="greenToBlue"
         >
           Upload Assignment
@@ -237,8 +259,8 @@ function InstructorAssignmentPage() {
     <main className="my-10">
       <ListGroup>
         <Section subtitle="All assignments">
-          <Button onClick={() => handleEdit({})} gradientDuoTone="greenToBlue">
-            <FaPlus /> Add a new assignment
+          <Button onClick={handleCreate} gradientDuoTone="greenToBlue">
+            <FaPlus className="mr-4" /> Add a new assignment
           </Button>
           <ReactDataGrid
             idProperty="id"

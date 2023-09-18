@@ -37,12 +37,14 @@ export type ModalActions =
 export type authActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
 export const defaultStudent = {
+  _id: "",
   firstName: "John",
   lastName: "Doe",
   email: "john.doe@gmail.com",
   role: "student",
 };
 export const defaultInstructor: IInstructor = {
+  _id: "",
   firstName: "John",
   lastName: "Doe",
   assignment: [],

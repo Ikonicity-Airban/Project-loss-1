@@ -61,14 +61,14 @@ function App() {
         <Modal.Footer className="justify-end">
           {modal.onOk && (
             <Button
-              size="xs"
+              size="sm"
               color={modal.type == "Error" ? "failure" : "success"}
               onClick={() => onOk(modal.onOk)}
             >
               {modal.buttonOK}
             </Button>
           )}
-          <Button size="xs" color="gray" onClick={closeModal}>
+          <Button size="sm" color="gray" onClick={closeModal}>
             Cancel
           </Button>
         </Modal.Footer>

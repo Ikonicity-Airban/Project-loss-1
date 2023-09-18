@@ -1,11 +1,11 @@
 import { Card, ListGroup, Progress } from "flowbite-react";
-import { IStudent } from "../../api/@types";
-import { assignmentColumns } from "../../api/resource/columns";
 
 import { AxiosResponse } from "axios";
 import { Helmet } from "react-helmet";
+import { IStudent } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
+import { assignmentColumns } from "../../api/resource/columns";
 import { getCourse } from "../../api/resource/course";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 import { useMemo } from "react";
@@ -21,6 +21,7 @@ function StudentDashboard() {
     cacheTime: 3600000,
     refetchInterval: 3600000,
   });
+  console.log("🚀 ~ file: Dashboard.tsx:24 ~ StudentDashboard ~ data:", data);
 
   const { data: assignment } = useQuery(
     "assignments",
@@ -34,7 +35,6 @@ function StudentDashboard() {
     "student",
     async () => await http.get("/students/my-profile")
   );
-
 
   const cards = useMemo(
     () => [
@@ -89,11 +89,11 @@ function StudentDashboard() {
       <ListGroup>
         <ListGroup.Item>
           <Section title="My course progress">
-            <div className="grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 desktop:grid-cols-4 gap-4 w-full align-item-center text-white">
+            <div className="grid grid-cols-1 md:grid-cols-2 laptop:grid-cols-3 monitor:grid-cols-4 gap-4 w-full align-item-center text-white">
               {cards.map(({ className, title, course, id, progress }, i) => (
                 <div
                   className={`block ${
-                    i == 3 ? "laptop:hidden desktop:block" : ""
+                    i == 3 ? "laptop:hidden monitor:block" : ""
                   }`}
                   key={id}
                 >
@@ -131,6 +131,7 @@ function StudentDashboard() {
               style={{
                 minWidth: "100%",
               }}
+              loading={isLoading}
               columns={assignmentColumns}
               dataSource={assignment?.data || []}
             />

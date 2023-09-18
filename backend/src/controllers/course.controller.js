@@ -3,15 +3,24 @@ const Course = require("../models/course.model");
 const { BadRequestError, NotFoundError } = require("../error");
 const User = require("../models/user.model");
 const Student = require("../models/student.model");
+const Instructor = require("../models/instructor.model");
 
 //Create a course
 async function CreateCourse(req, res) {
   if (!req.body) throw new BadRequestError("No body provided");
+
+  const { instructor: instructorId } = req.body;
+
+  const instructor = await Instructor.findById(instructorId);
+  if (!instructor) throw NotFoundError("instructor not found");
+
   const course = await Course.create({
     ...req.body,
   });
-
   if (!course) throw new Error("Internal Server Error");
+
+  //Add a course for a lecturer through the admin
+  instructor.courseTeaching.push(course._id);
 
   res.status(StatusCodes.CREATED).json(course);
 }
@@ -59,10 +68,7 @@ async function UnRegisterCourse(req, res) {
 
 // Get all available courses
 async function GetAllCourses(req, res) {
-  const courses = await Course.find({})
-    .populate("department", "name")
-    .populate("instructor")
-    .lean();
+  const courses = await Course.find({}).populate("instructor").lean();
   res.status(StatusCodes.OK).json({ courses, count: courses.length });
 }
 
@@ -79,7 +85,11 @@ async function GetOneCourse(req, res) {
 //update courses
 async function UpdateOneCourse(req, res) {
   const { courseId } = req.params;
-  if (!req.body) throw new BadRequestError("Please provide a valid query");
+  if (!req.body) throw new BadRequestError("Please provide a valid data");
+  const { instructor: instructorId } = req.body;
+  const instructor = await Instructor.findById(instructorId);
+  if (!instructor) throw NotFoundError("instructor not found");
+
   const course = await Course.findByIdAndUpdate(
     courseId,
     {
@@ -90,6 +100,7 @@ async function UpdateOneCourse(req, res) {
       runValidators: true,
     }
   ).lean();
+
   if (!course) throw new NotFoundError("Course Not found");
   res.status(StatusCodes.OK).json(course);
 }

@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 function AdminDashboard() {
   const http = useAxiosPrivate();
   const { data } = useQuery("courses", async () => await http.get("/courses"));
+  console.log("🚀 ~ file: Dashboard.tsx:18 ~ AdminDashboard ~ data:", data);
 
   return (
     <div className="space-y-6">

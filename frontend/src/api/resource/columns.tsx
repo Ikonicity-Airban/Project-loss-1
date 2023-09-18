@@ -63,6 +63,7 @@ export const assignmentColumns: TypeColumns = [
       const nameRegex = /filename=([^;]*)/;
       const nameMatch = mimeType.match(nameRegex);
       if (nameMatch && nameMatch.length > 1) {
+        fullMatch && base64Data;
         fileName = nameMatch[1];
       }
 

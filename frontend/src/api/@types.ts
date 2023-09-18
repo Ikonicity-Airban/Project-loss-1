@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 type dataResponse = {
-  _id?: string;
+  _id: string;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
@@ -41,6 +41,7 @@ export type ICourse = {
   code: string;
   description?: string;
   department?: IDepartment["name"];
+  instructor?: string;
 } & dataResponse;
 
 export type IDepartment = {
@@ -53,19 +54,21 @@ export type IDepartment = {
 } & dataResponse;
 
 export type IAssignment = {
-  title?: string;
-  file?: string;
-  instructor?: string;
-  level?: 100 | 200 | 300 | 400;
-  description?: string;
-  course?: ICourse["title"];
+  title: string;
+  file: string;
+  instructor: string;
+  level: 100 | 200 | 300 | 400;
+  description: string;
+  submission: string;
+  course: ICourse["title"];
 } & dataResponse;
 
 export type IInstructor = {
+  // id: string
   userId?: IUser;
   firstName?: string;
   lastName?: string;
-  coursesTeaching?: ICourse[];
+  courseTeaching?: ICourse;
   assignment: IAssignment[];
   department?: IDepartment["name"];
 } & dataResponse;

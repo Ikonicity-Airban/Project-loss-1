@@ -1,4 +1,4 @@
-import { Button, Card, Label, Select, TextInput } from "flowbite-react";
+import { Button, Card, Label, TextInput } from "flowbite-react";
 import { CustomError, IInstructor } from "../../api/@types";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -46,11 +46,19 @@ function InstructorProfilePage() {
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="space-y-3">
-              <Label value="First Name" htmlFor="name" />
+              <Label value="First Name" htmlFor="firstName" />
               <TextInput
                 required
-                defaultValue={instructor.name}
-                {...register("name")}
+                defaultValue={instructor.firstName}
+                {...register("firstName")}
+              />
+            </div>
+            <div className="space-y-3">
+              <Label value="Last Name" htmlFor="lastName" />
+              <TextInput
+                required
+                defaultValue={instructor.lastName}
+                {...register("firstName")}
               />
             </div>
 

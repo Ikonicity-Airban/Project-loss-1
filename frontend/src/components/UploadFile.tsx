@@ -1,50 +1,48 @@
 import { FileInput, Label } from "flowbite-react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface FileUploadProps {
-  onFileUpload: (dataURI: string) => void;
+  setFile: Dispatch<SetStateAction<string>>;
+  acceptType?: string;
+  props?: React.HTMLAttributes<HTMLInputElement>;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload }) => {
+const FileUpload: React.FC<FileUploadProps> = ({
+  setFile,
+  acceptType,
+  props,
+}) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleUpload = (file: File | undefined) => {
-    console.log("🚀 ~ file: UploadFile.tsx:12 ~ handleUpload ~ file:", file);
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
       const dataURI = reader.result as string;
       // Save the file to local storage (you can use other storage options as well)
-
       // Pass the file and data URI to the parent component for further processing
-      onFileUpload(dataURI);
-      console.log(
-        "🚀 ~ file: UploadFile.tsx:21 ~ handleUpload ~ dataURI:",
-        dataURI
-      );
+      setFile(dataURI);
     };
     reader.readAsDataURL(file);
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
     setSelectedFile(() => file || null);
-
     handleUpload(file);
   };
 
   return (
-    <div className="flex p-2 items-center gap-4 ring-1">
-      <Label htmlFor="upload">
-        {selectedFile?.name || "Click to choose a upload a pdf file"}
+    <div className="flex items-center gap-4 ring-1 rounded-xl text-center">
+      <Label htmlFor="upload" className="h-full p-2 cursor-pointer w-full">
+        {selectedFile?.name || "Click to choose a pdf file"}
       </Label>
       <FileInput
-        required
-        id="upload"
+        {...props}
         name="file"
+        id="upload"
         className="outline-none hidden"
-        accept=".pdf"
+        accept={acceptType || "application/pdf"}
         onChange={handleFileChange}
       />
     </div>

@@ -1,9 +1,16 @@
-import { Button, Card, Label, ListGroup, TextInput } from "flowbite-react";
+import {
+  Button,
+  Label,
+  ListGroup,
+  Select,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { ICourse, IInstructor } from "../../api/@types";
 import { useMutation, useQuery } from "react-query";
 
 import { AppContext } from "../../api/context";
-import { ICourse } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
@@ -24,6 +31,17 @@ const CoursePage = () => {
     courses: ICourse[];
   }> => {
     const response = await http.get(`/courses`);
+    console.log(
+      "🚀 ~ file: courses.tsx:35 ~ fetchCourses ~ response:",
+      response
+    );
+    return response.data;
+  };
+  const fetchInstructors = async (): Promise<{
+    count: number;
+    instructors: IInstructor[];
+  }> => {
+    const response = await http.get(`/instructors`);
     return response.data;
   };
 
@@ -40,7 +58,12 @@ const CoursePage = () => {
   const deleteCourse = async (id: string): Promise<void> => {
     await http.delete(`/courses/${id}`);
   };
-  const { data, isLoading } = useQuery<{ count: number; courses: ICourse[] }>(
+  const { data: instructor, isLoading } = useQuery<{
+    count: number;
+    instructors: IInstructor[];
+  }>("instructor", fetchInstructors);
+
+  const { data: courses } = useQuery<{ count: number; courses: ICourse[] }>(
     "courses",
     fetchCourses
   );
@@ -66,11 +89,13 @@ const CoursePage = () => {
   });
 
   const onSubmit = (data: ICourse) => {
+    console.log("🚀 ~ file: courses.tsx:88 ~ onSubmit ~ data:", data);
     if (data._id) {
       updateMutation.mutate(data);
     } else {
       createMutation.mutate(data);
     }
+    // reset();
   };
   const handleEdit = (course) => {
     dispatch({
@@ -115,9 +140,9 @@ const CoursePage = () => {
   const RegisterForm = () => (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-screen-tablet w-full mx-auto"
+      className="max-w-screen-tablet w-full mx-auto text-left"
     >
-      <Card>
+      <div className="space-y-6">
         <input type="hidden" {...register("_id")} />
 
         <div>
@@ -127,31 +152,56 @@ const CoursePage = () => {
 
         <div>
           <Label>Course Code</Label>
-          <TextInput type="text" {...register("code", { required: true })} />
-        </div>
-
-        <div>
-          <Label>Course Description</Label>
           <TextInput
             type="text"
+            {...register("code", { required: true, maxLength: 3 })}
+          />
+        </div>
+        <div>
+          <Label htmlFor="desc">Course Description</Label>
+          <Textarea
+            id="desc"
+            className="h-32"
             {...register("description", { required: true })}
           />
         </div>
-        <Button type="submit">Save</Button>
-      </Card>
+        <div>
+          <Label htmlFor="desc">Course Lecturer</Label>
+          <Select {...register("instructor")}>
+            {instructor?.instructors.map(({ _id, lastName, firstName }) => (
+              <option value={_id} key={_id}>
+                {firstName} - {lastName}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            gradientDuoTone="greenToBlue"
+          >
+            Save
+          </Button>
+        </div>
+      </div>
     </form>
   );
 
   return (
-    <Section title="Courses">
-      <Button gradientDuoTone="greenToBlue" onClick={() => handleEdit({})}>
-        <FaPlus /> Add a new course
+    <Section title="Courses" subtitle="All Courses">
+      <Button
+        gradientDuoTone="greenToBlue"
+        className="w-fit float-right"
+        onClick={() => handleEdit({})}
+      >
+        <FaPlus className="mx-4" /> Add a new course
       </Button>
       <ListGroup>
         <ReactDataGrid
           idProperty="id"
           loading={isLoading}
-          dataSource={data?.courses || []}
+          dataSource={courses?.courses || []}
           columns={columns}
           editable={true}
           style={{

@@ -39,24 +39,25 @@ function LoginPage() {
       return navigate(`/${role}`, {
         replace: true,
       });
-    } catch (error: CustomError) {
-      dispatch({
-        type: Types.open,
-        payload: {
-          buttonOK: "OK",
-          header: "Error",
-          onOk: function () {
-            console.log(error);
+    } catch (error) {
+      error instanceof Error &&
+        dispatch({
+          type: Types.open,
+          payload: {
+            buttonOK: "OK",
+            header: "Error",
+            onOk: function () {
+              console.log(error);
+            },
+            content: (
+              <div className="text-red-700 dark:text-yellow-600 p-6 flex items-center">
+                <FaExclamationCircle className="text-6xl flex-[0.3]" />
+                <p className="my-3 flex-[2]">{error.response.data.msg}</p>
+              </div>
+            ),
+            type: "Error",
           },
-          content: (
-            <div className="text-red-700 dark:text-yellow-600 p-6 flex items-center">
-              <FaExclamationCircle className="text-6xl flex-[0.3]" />
-              <p className="my-3 flex-[2]">{error.response.data.msg}</p>
-            </div>
-          ),
-          type: "Error",
-        },
-      });
+        });
     } finally {
       setIsLoading(false);
     }

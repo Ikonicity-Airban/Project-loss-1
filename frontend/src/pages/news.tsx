@@ -1,5 +1,5 @@
 import { BreadcrumbComponents } from "../components";
-import EventList from "./home/eventList";
+import EventList from "./home/EventList";
 import NewsSection from "./home/NewsSection";
 import Section from "../components/Section";
 
