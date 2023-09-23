@@ -1,10 +1,10 @@
+import { IAssignment, IInstructor } from "../../api/@types";
+
+import AssignmentsList from "../../components/AssignmentsList";
 import { AxiosResponse } from "axios";
 import { Helmet } from "react-helmet";
-import { IInstructor } from "../../api/@types";
 import { ListGroup } from "flowbite-react";
-import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
-import { assignmentColumns } from "../../api/resource/columns";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 import { useQuery } from "react-query";
 
@@ -15,9 +15,15 @@ import { useQuery } from "react-query";
 function InstructorDashboard() {
   const http = useAxiosPrivate();
 
-  const { data: assignment, isLoading } = useQuery(
+  const { data: assignment } = useQuery(
     "assignments",
-    async () => await http.get("/assignments"),
+    async (): Promise<{
+      count: number;
+      assignments: IAssignment[];
+    }> => {
+      const response = await http.get(`/assignments`);
+      return response.data;
+    },
     {
       cacheTime: 3600000,
       refetchInterval: 3600000,
@@ -45,22 +51,7 @@ function InstructorDashboard() {
       </div>
       <hr />
       <ListGroup>
-        <Section title="Assignments">
-          <div className="overflow-auto w-full">
-            <ReactDataGrid
-              emptyText="No assignment for now 🚀"
-              style={{
-                minWidth: "100%",
-              }}
-              loading={isLoading}
-              columns={assignmentColumns}
-              dataSource={assignment?.data || []}
-            />
-          </div>
-        </Section>
-        <Section title="Notification">
-          <center>No notification</center>
-        </Section>
+        <AssignmentsList assignments={assignment?.assignments || []} />
       </ListGroup>
     </div>
   );

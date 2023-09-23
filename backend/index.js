@@ -22,7 +22,6 @@ const cors = require("cors");
 // console.clear();
 const app = express();
 const PORT = process.env.PORT || 6986;
-dbConnect(process.env.MONGO_URL);
 /*--------------------------------Middlewares--------------------------*/
 
 //morgan
@@ -48,9 +47,21 @@ app.use(errorHandlerMiddleware);
 
 const server = createServer(app);
 // server up
-server.listen(
-  PORT,
-  logger.info(
-    `Server has started, and is running in ${process.env.NODE_ENV} on http://localhost:${PORT}`
+dbConnect(process.env.MONGO_URL).then(() =>
+  server.listen(
+    PORT,
+    logger.info(
+      `
+      .....................................................................
+      |                          Server info                              |
+      |-------------------------------------------------------------------|
+      | Status              ---->        Running,                         |
+      | Mode                ---->        ${process.env.NODE_ENV}                      |
+      | Host_address        ---->        http://localhost:${PORT}            |
+      | (Server file)       ---->       ./backend/index.js                |
+      |===================================================================|
+      .....................................................................
+      `
+    )
   )
 );

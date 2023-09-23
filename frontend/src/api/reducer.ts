@@ -1,4 +1,4 @@
-import { IInstructor, ILoginResponse, IModal } from "./@types";
+import { IInstructor, ILoginResponse, IModal, IStudent } from "./@types";
 
 type ActionMap<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -28,7 +28,7 @@ type AuthPayload = {
 
 type ModalPayload = {
   [Types.open]: IModal;
-  [Types.close]: IModal;
+  [Types.close]: null;
 };
 
 export type ModalActions =
@@ -36,14 +36,16 @@ export type ModalActions =
 
 export type authActions = ActionMap<AuthPayload>[keyof ActionMap<AuthPayload>];
 
-export const defaultStudent = {
+export const defaultStudent: IStudent = {
+  _id: "",
   firstName: "John",
   lastName: "Doe",
-  email: "john.doe@gmail.com",
-  role: "student",
+  level: 100,
 };
 export const defaultInstructor: IInstructor = {
-  name: "John",
+  _id: "",
+  firstName: "John",
+  lastName: "Doe",
   assignment: [],
   department: "Computer Science",
 };
@@ -79,7 +81,7 @@ export const authReducer = <S>(
       return {
         ...state,
 
-        modal: { ...action.payload, show: false },
+        modal: { show: false },
       };
 
     default:

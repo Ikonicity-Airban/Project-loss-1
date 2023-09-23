@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 type dataResponse = {
-  _id?: string;
+  _id: string;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
@@ -15,11 +15,12 @@ type IUser = {
 
 export type IStudent = {
   userId?: IUser;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   coursesOffered?: ICourse[];
-  level?: number | 100 | 200 | 300 | 400;
+  level: number | 100 | 200 | 300 | 400;
   reg_no?: string;
+  photoURL?: string;
   sex?: "male" | "female";
   mobile_phone?: string;
   contact_address?: string;
@@ -41,6 +42,7 @@ export type ICourse = {
   code: string;
   description?: string;
   department?: IDepartment["name"];
+  instructor?: IInstructor;
 } & dataResponse;
 
 export type IDepartment = {
@@ -53,19 +55,23 @@ export type IDepartment = {
 } & dataResponse;
 
 export type IAssignment = {
-  title?: string;
-  file?: string;
-  level?: 100 | 200 | 300 | 400;
-  description?: string;
-  course?: ICourse["title"];
+  title: string;
+  file: string;
+  instructor: string;
+  level: 100 | 200 | 300 | 400;
+  description: string;
+  submission: string;
+  course: ICourse;
 } & dataResponse;
 
 export type IInstructor = {
   userId?: IUser;
-  firstName?: string;
-  lastName?: string;
-  coursesTeaching?: ICourse[];
-  assignment: IAssignment[];
+  title?: string;
+  firstName: string;
+  lastName: string;
+  photoURL?: string;
+  courseTeaching?: ICourse;
+  assignment?: IAssignment[];
   department?: IDepartment["name"];
 } & dataResponse;
 
@@ -86,7 +92,7 @@ export type CustomError = {
 };
 
 export type IModal = {
-  type?: "Success" | "Error" | string;
+  type?: "Success" | "Error" | "Default";
   show?: boolean;
   header?: string;
   content?: ReactNode;
@@ -98,4 +104,12 @@ export type IResult = {
   student: IStudent;
   courses: ICourse[];
   level: 100 | 200 | 300 | 400;
+} & dataResponse;
+
+export type IEvent = {
+  instructor: IInstructor;
+  title: string;
+  date?: Date;
+  content: string;
+  type: "news" | "event";
 } & dataResponse;

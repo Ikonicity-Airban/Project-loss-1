@@ -1,8 +1,27 @@
 import { Card } from "flowbite-react";
-import Section from "../../components/Section";
+import { IEvent } from "../../api/@types";
 
-const NewsSection = () => {
+interface Props {
+  news?: IEvent[];
+}
+const NewsSection = ({ news }: Props) => {
   return (
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
+      {news &&
+        news.map((item) => (
+          <Card key={item._id}>
+            <h3 className="text-lg font-bold mb-2 logo-clipped">
+              {item.title}
+            </h3>
+            <p className="text-xs text-gray-400">
+              {new Date(item.date || "").toDateString()}
+            </p>
+            <p className="">{item.content}</p>
+          </Card>
+        ))}
+    </div>
+
     <Section>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
         <Card>
@@ -47,6 +66,7 @@ const NewsSection = () => {
         {/* Add more event cards here */}
       </div>
     </Section>
+
   );
 };
 

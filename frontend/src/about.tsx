@@ -33,37 +33,29 @@ const AboutPage: React.FC = () => {
         </p>
       </Section>
 
-      <FacultySection></FacultySection>
-      <Section>
-        <h2>Academic Programs</h2>
+      <Section subtitle="Faculty and Staff">
         <p>
-          Our department offers a range of academic programs designed to cater
-          to diverse interests and career goals. Whether you are an
-          undergraduate or graduate student, we have programs that will equip
-          you with the skills and knowledge necessary for success in the field
-          of computer science.
+          Our department boasts a team of highly qualified and accomplished
+          faculty members who are passionate about computer science education
+          and research. With expertise in various subfields of computer science,
+          our faculty members actively contribute to advancements in the
+          discipline. They are dedicated mentors who guide and inspire our
+          students to reach their full potential. Our committed staff members
+          ensure the smooth functioning of the department and provide valuable
+          support to students and faculty.
         </p>
-        <h3>National Diploma in Computer Science</h3>
-        <p>
-          Our undergraduate program in Computer Science provides a solid
-          foundation in core computer science concepts and programming. Students
-          gain expertise in areas such as algorithms, data structures, software
-          development, and computer architecture. With a comprehensive
-          curriculum, hands-on projects, and industry internships, graduates are
-          well-prepared for careers in software engineering, systems analysis,
-          and more.
-        </p>
-        <h3>Higher National Diploma [HND] in Computer Science</h3>
-        <p>
-          Our graduate program in Computer Science offers advanced coursework
-          and research opportunities in specialized areas of computer science.
-          Students can choose from a variety of tracks, including artificial
-          intelligence, data science, cybersecurity, and more. The program
-          provides a platform for in-depth exploration of cutting-edge topics
-          and prepares students for leadership roles in industry or further
-          research in academia.
-        </p>
+        <div>
+          Meet some of our esteemed faculty members:
+          <ul>
+            <li>
+              Dr. John Smith - Artificial Intelligence and Machine Learning
+            </li>
+            <li>Dr. Jane Doe - Human-Computer Interaction</li>
+            <li>Dr. Michael Johnson - Data Science and Analytics</li>
+          </ul>
+        </div>
       </Section>
+
     </div>
   );
 };

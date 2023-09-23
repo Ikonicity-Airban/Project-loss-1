@@ -1,13 +1,19 @@
-import { Button, Card, Label, ListGroup, TextInput } from "flowbite-react";
+import {
+  Button,
+  Label,
+  ListGroup,
+  Select,
+  TextInput,
+  Textarea,
+} from "flowbite-react";
 import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
+import { ICourse, IInstructor } from "../../api/@types";
 import { useMutation, useQuery } from "react-query";
 
 import { AppContext } from "../../api/context";
-import { ICourse } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
-import { TypeEditInfo } from "@inovua/reactdatagrid-community/types";
 import { Types } from "../../api/reducer";
 import { toast } from "react-hot-toast";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
@@ -26,6 +32,13 @@ const CoursePage = () => {
     const response = await http.get(`/courses`);
     return response.data;
   };
+  const fetchInstructors = async (): Promise<{
+    count: number;
+    instructors: IInstructor[];
+  }> => {
+    const response = await http.get(`/instructors`);
+    return response.data;
+  };
 
   const createCourse = async (data: ICourse): Promise<ICourse> => {
     const response = await http.post<ICourse>(`/courses`, data);
@@ -40,22 +53,37 @@ const CoursePage = () => {
   const deleteCourse = async (id: string): Promise<void> => {
     await http.delete(`/courses/${id}`);
   };
-  const { data, isLoading } = useQuery<{ count: number; courses: ICourse[] }>(
-    "courses",
-    fetchCourses
-  );
+  const { data: instructor, isLoading } = useQuery<{
+    count: number;
+    instructors: IInstructor[];
+  }>("instructor", fetchInstructors);
+
+  const { data: courses, refetch } = useQuery<{
+    count: number;
+    courses: ICourse[];
+  }>("courses", fetchCourses);
 
   const createMutation = useMutation("courses", createCourse, {
     onSuccess: () => {
-      toast.success("Created successfully");
+      dispatch({
+        type: Types.close,
+        payload: null,
+      });
+      refetch();
       reset();
+      toast.success("Updated successfully");
     },
   });
 
   const updateMutation = useMutation("courses", updateCourse, {
     onSuccess: () => {
-      toast.success("Updated successfully");
+      dispatch({
+        type: Types.close,
+        payload: null,
+      });
       reset();
+      toast.success("Updated successfully");
+      refetch();
     },
   });
 
@@ -71,7 +99,13 @@ const CoursePage = () => {
     } else {
       createMutation.mutate(data);
     }
+    // reset();
+    dispatch({
+      type: Types.close,
+      payload: null,
+    });
   };
+
   const handleEdit = (course) => {
     dispatch({
       type: Types.open,
@@ -84,11 +118,11 @@ const CoursePage = () => {
     reset(course);
   };
 
-  function handleTableEdit(editInfo: TypeEditInfo) {
-    console.log(
-      "🚀 ~ file: courses.tsx:78 ~ handleTableEdit ~ editInfo:",
-      editInfo
-    );
+  function handleTableEdit(editInfo) {
+    updateMutation.mutate({
+      ...editInfo?.data,
+      [editInfo.columnId]: editInfo.value,
+    });
   }
 
   const handleDelete = (id: string) => {
@@ -105,8 +139,11 @@ const CoursePage = () => {
       defaultWidth: 100,
       render: ({ data }) => (
         <div className="flex items-center gap-4 justify-around p-2">
-          <FaPen onClick={() => handleEdit(data)} />
-          <FaTrash onClick={() => handleDelete(data.id)} />
+          <FaPen onClick={() => handleEdit(data)} className="cursor-pointer" />
+          <FaTrash
+            onClick={() => handleDelete(data._id)}
+            className="cursor-pointer"
+          />
         </div>
       ),
     },
@@ -115,10 +152,10 @@ const CoursePage = () => {
   const RegisterForm = () => (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-screen-tablet w-full mx-auto"
+      className="max-w-screen-tablet w-full mx-auto text-left"
     >
-      <Card>
-        <input type="hidden" {...register("_id")} />
+      <div className="space-y-6">
+        {/* <input type="hidden" {...register("_id")} /> */}
 
         <div>
           <Label>Course Title</Label>
@@ -127,31 +164,57 @@ const CoursePage = () => {
 
         <div>
           <Label>Course Code</Label>
-          <TextInput type="text" {...register("code", { required: true })} />
-        </div>
-
-        <div>
-          <Label>Course Description</Label>
           <TextInput
             type="text"
+            maxLength={3}
+            {...register("code", { required: true })}
+          />
+        </div>
+        <div>
+          <Label htmlFor="desc">Course Description</Label>
+          <Textarea
+            id="desc"
+            className="h-32"
             {...register("description", { required: true })}
           />
         </div>
-        <Button type="submit">Save</Button>
-      </Card>
+        <div>
+          <Label htmlFor="desc">Course Lecturer</Label>
+          <Select {...register("instructor")}>
+            {instructor?.instructors.map(({ _id, lastName, firstName }) => (
+              <option value={_id} key={_id}>
+                {firstName} - {lastName}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            gradientDuoTone="greenToBlue"
+          >
+            Save
+          </Button>
+        </div>
+      </div>
     </form>
   );
 
   return (
-    <Section title="Courses">
-      <Button gradientDuoTone="greenToBlue" onClick={() => handleEdit({})}>
-        <FaPlus /> Add a new course
+    <Section title="Courses" subtitle="All Courses">
+      <Button
+        gradientDuoTone="greenToBlue"
+        className="w-fit float-right"
+        onClick={() => handleEdit({})}
+      >
+        <FaPlus className="mx-4" /> Add a new course
       </Button>
       <ListGroup>
         <ReactDataGrid
           idProperty="id"
           loading={isLoading}
-          dataSource={data?.courses || []}
+          dataSource={courses?.courses || []}
           columns={columns}
           editable={true}
           style={{

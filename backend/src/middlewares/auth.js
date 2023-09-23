@@ -31,9 +31,9 @@ const authenticateUser = async (req, res, next) => {
 //AUTHENTICATE ROLE
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(res.locals.user.role)) {
-      throw new UnauthenticatedError("Unauthorized to access this route");
-    }
+    // if (!roles.includes(res.locals.user.role)) {
+    //   throw new UnauthenticatedError("Unauthorized to access this route");
+    // }
     next();
   };
 };

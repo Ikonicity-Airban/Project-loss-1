@@ -1,7 +1,18 @@
 import "../App.css";
 
 import { Avatar, Dropdown, Navbar, Sidebar } from "flowbite-react";
-import { FaBookOpen, FaBoxOpen, FaDiceFour, FaReceipt } from "react-icons/fa";
+import {
+  FaBookOpen,
+  FaBoxOpen,
+  FaDiceFour,
+  FaNewspaper,
+  FaPagelines,
+  FaRegUser,
+  FaSignOutAlt,
+  FaUser,
+  FaUserEdit,
+  FaUserGraduate,
+} from "react-icons/fa";
 import { IInstructor, IStudent } from "../api/@types";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Types, defaultInstructor, defaultStudent } from "../api/reducer";
@@ -17,11 +28,20 @@ const studentSideLinks = [
   { name: "Dashboard", link: "", icon: <FaDiceFour /> },
   { name: "Courses", link: "my-courses", icon: <FaBookOpen /> },
   { name: "Assignment", link: "assignment", icon: <FaBoxOpen /> },
-  { name: "Result", link: "result", icon: <FaReceipt /> },
 ];
 const instructorSideLinks = [
   { name: "Dashboard", link: "", icon: <FaDiceFour /> },
   { name: "Assignment", link: "assignment", icon: <FaBoxOpen /> },
+  { name: "Events", link: "events", icon: <FaNewspaper /> },
+  { name: "Profile", link: "my-profile", icon: <FaUserEdit /> },
+];
+
+const AdminSideLinks = [
+  { name: "Dashboard", link: "", icon: <FaDiceFour /> },
+  { name: "News & Events", link: "events", icon: <FaNewspaper /> },
+  { name: "Courses", link: "courses", icon: <FaPagelines /> },
+  { name: "Students", link: "students", icon: <FaUserGraduate /> },
+  { name: "Instructor", link: "instructors", icon: <FaRegUser /> },
 ];
 
 export const StudentLayout = () => {
@@ -94,6 +114,7 @@ export const StudentLayout = () => {
                 <Avatar
                   rounded
                   bordered
+                  img={student.photoURL}
                   placeholderInitials={
                     student.userId
                       ? student.userId?.email.slice(0, 2).toUpperCase()
@@ -176,7 +197,7 @@ export const StudentLayout = () => {
 export const InstructorLayout = () => {
   const [toggle, setToggle] = useState(false);
   const [width, setWidth] = useState<number>(window.innerWidth);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const http = useAxiosPrivate();
   const { dispatch } = useContext(AppContext);
   const [instructor, setInstructor] = useLocalStorage<IInstructor>(
@@ -211,20 +232,20 @@ export const InstructorLayout = () => {
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  useEffect(() => {
-    if (!instructor.userId) {
-      navigate("/login");
-    }
-  });
+  // useEffect(() => {
+  //   if (!instructor.userId) {
+  //     navigate("/login");
+  //   }
+  // });
 
   return (
     <>
       <Navbar
         fluid
         rounded
-        className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
+        className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] shadow backdrop-blur-lg"
       >
-        <div className="flex-[1.9] flex items-center">
+        <div className="flex items-center">
           <div className="tablet:hidden px-2">
             <Navbar.Toggle />
           </div>
@@ -232,14 +253,19 @@ export const InstructorLayout = () => {
             <LogoComponent />
           </Link>
         </div>
+        <span className="logo-clipped font-semibold uppercase">
+          Instructor Dashboard
+        </span>
         <div className="p-2 md:pr-4">
           <Dropdown
             arrowIcon={false}
+            className="text-gray-500"
             inline
             label={
               <Avatar
                 rounded
                 bordered
+                img={instructor.photoURL}
                 placeholderInitials={instructor.userId?.email
                   .slice(0, 2)
                   .toUpperCase()}
@@ -247,12 +273,19 @@ export const InstructorLayout = () => {
               />
             }
           >
+            <Dropdown.Header>
+              <h4 className="font-semibold">
+                {instructor.firstName} - {instructor.lastName}
+              </h4>
+              <h5 className="text-primary">{instructor.userId?.email}</h5>
+            </Dropdown.Header>
             <Link to="my-profile">
-              <Dropdown.Item>
+              <Dropdown.Item icon={FaUser}>
                 <div className="px-4">Profile</div>
               </Dropdown.Item>
             </Link>
             <Dropdown.Item
+              icon={FaSignOutAlt}
               href="/login"
               onClick={() =>
                 dispatch({
@@ -303,6 +336,17 @@ export const InstructorLayout = () => {
 };
 
 export const AdminLayout = () => {
+  const [toggle, setToggle] = useState(false);
+  const [width, setWidth] = useState<number>(window.innerWidth);
+
+  useEffect(() => {
+    function resize(e: UIEvent) {
+      setWidth(e.view?.innerWidth || window.innerWidth);
+      window.innerWidth > 640 && setToggle(false);
+    }
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
   return (
     <>
       <Navbar
@@ -310,7 +354,7 @@ export const AdminLayout = () => {
         rounded
         className="fixed -ml-1 top-0 w-full z-50 bg-[#ffffffaa] backdrop-blur-lg"
       >
-        <div className="flex-[1.9]">
+        <div className="">
           <div className="tablet:hidden px-2">
             <Navbar.Toggle />
           </div>
@@ -318,6 +362,7 @@ export const AdminLayout = () => {
             <LogoComponent />
           </Link>
         </div>
+        <span className="uppercase font-black">Super Admin Dashboard</span>
         <div className="p-2 md:pr-4">
           <Dropdown
             arrowIcon={false}
@@ -332,17 +377,46 @@ export const AdminLayout = () => {
             }
           >
             <Link to="my-profile">
-              <Dropdown.Item>
+              <Dropdown.Item icon={FaUser}>
                 <div className="px-4">Profile</div>
               </Dropdown.Item>
             </Link>
-            <Dropdown.Item href="/login">
+            <Dropdown.Item href="/login" icon={FaSignOutAlt}>
               <div className="px-4">Logout</div>
             </Dropdown.Item>
           </Dropdown>
         </div>
       </Navbar>
-      <main className="min-h-screen p-4 relative mt-16 dark:bg-gray-900">
+      <Sidebar
+        id="logo-sidebar"
+        aria-label="Sidebar" /* className="h-screen fixed shadow-lg" */
+        className="float-left fixed -mt-1 left-0 z-40 mobile:w-3/5 sm:w-64  transition-transform h-screen border-r border-gray-100 dark:border-gray-800"
+        style={{
+          transform:
+            toggle || width > 639 ? "translateX(0%)" : "translateX(-100%)",
+        }}
+      >
+        <Sidebar.ItemGroup>
+          {AdminSideLinks.map(({ name, icon, link }) => (
+            <div className="p-4 mt-10" key={name}>
+              <NavLink
+                to={link}
+                className={({ isActive }) =>
+                  `${isActive ? "text-primary" : "text-gray-500"}`
+                }
+                onClick={() => setToggle(false)}
+              >
+                <div className="text-xs sm:text-sm flex items-center gap-6 ">
+                  <span>{icon}</span>
+                  <span>{name}</span>
+                </div>
+              </NavLink>
+            </div>
+          ))}
+        </Sidebar.ItemGroup>
+      </Sidebar>
+      <main className="min-h-screen tablet:ml-64 p-4 relative mt-16 dark:bg-gray-900">
+        <BreadcrumbComponents />
         <Outlet />
       </main>
     </>

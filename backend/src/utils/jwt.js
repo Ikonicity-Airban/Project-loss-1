@@ -6,7 +6,7 @@ const signAccessToken = (payload) => {
   try {
     if (!payload) return null;
     const accessToken = sign(payload, process.env.ACCESS_TOKEN, {
-      expiresIn: 1800,
+      expiresIn: "7d",
     });
 
     return accessToken;

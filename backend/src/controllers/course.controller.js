@@ -3,15 +3,26 @@ const Course = require("../models/course.model");
 const { BadRequestError, NotFoundError } = require("../error");
 const User = require("../models/user.model");
 const Student = require("../models/student.model");
+const Instructor = require("../models/instructor.model");
 
 //Create a course
 async function CreateCourse(req, res) {
   if (!req.body) throw new BadRequestError("No body provided");
+
+  const { instructor: instructorId } = req.body;
+
+  const instructor = await Instructor.findById(instructorId);
+  if (!instructor) throw NotFoundError("instructor not found");
+
   const course = await Course.create({
     ...req.body,
   });
-
   if (!course) throw new Error("Internal Server Error");
+
+  //Add a course for a lecturer through the admin
+  instructor.courseTeaching = course._id;
+  instructor.save();
+  course.save();
 
   res.status(StatusCodes.CREATED).json(course);
 }
@@ -31,8 +42,9 @@ async function RegisterCourse(req, res) {
   if (!course) throw new NotFoundError("No course with the Id " + courseId);
 
   const alreadyRegister = student.coursesOffered.find(
-    (course) => course.toString() == courseId
+    (course) => course.toString() == courseId.toString()
   );
+
   if (alreadyRegister) throw new BadRequestError("You have already registered");
   student.coursesOffered.push(courseId);
   student.save();
@@ -58,10 +70,7 @@ async function UnRegisterCourse(req, res) {
 
 // Get all available courses
 async function GetAllCourses(req, res) {
-  const courses = await Course.find({})
-    .populate("department", "name")
-    .populate("instructor")
-    .lean();
+  const courses = await Course.find({}).populate("instructor").lean();
   res.status(StatusCodes.OK).json({ courses, count: courses.length });
 }
 
@@ -78,7 +87,8 @@ async function GetOneCourse(req, res) {
 //update courses
 async function UpdateOneCourse(req, res) {
   const { courseId } = req.params;
-  if (!req.body) throw new BadRequestError("Please provide a valid query");
+  if (!req.body) throw new BadRequestError("Please provide a valid data");
+
   const course = await Course.findByIdAndUpdate(
     courseId,
     {
@@ -89,7 +99,24 @@ async function UpdateOneCourse(req, res) {
       runValidators: true,
     }
   ).lean();
+
   if (!course) throw new NotFoundError("Course Not found");
+  const instructor = await Instructor.findByIdAndUpdate(
+    req.body.instructor,
+    {
+      courseTeaching: courseId,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  instructor.save();
+  console.log(
+    "🚀 ~ file: course.controller.js:92 ~ UpdateOneCourse ~ instructor:",
+    instructor
+  );
+
   res.status(StatusCodes.OK).json(course);
 }
 
@@ -98,6 +125,17 @@ async function DeleteOneCourse(req, res) {
   const { courseId } = req.params;
   const course = await Course.findByIdAndDelete(courseId);
   if (!course) throw new NotFoundError("Course Not found");
+  const instructor = await Instructor.findByIdAndUpdate(
+    req.body.instructor,
+    {
+      courseTeaching: null,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  instructor.save();
   res.status(StatusCodes.GONE).json({ msg: "Course Deleted" });
 }
 

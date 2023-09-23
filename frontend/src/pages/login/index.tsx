@@ -1,15 +1,15 @@
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
-import { CustomError, ILoginResponse } from "../../api/@types";
-import { FaEnvelope, FaExclamationCircle, FaLock } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { AppContext } from "../../api/context";
+import { FaExclamationCircle } from "react-icons/fa";
+import { ILoginResponse } from "../../api/@types";
 import LogoComponent from "../../components/LogoComponent";
 import { Types } from "../../api/reducer";
 import https from "../../api/https";
+import { loginFormFields } from "../../api/resource/fields";
 import { useContext } from "react";
-import { useMutation } from "react-query";
 import { useState } from "react";
 
 interface IFormInput {
@@ -17,45 +17,30 @@ interface IFormInput {
   password: string;
 }
 
-const formFields = [
-  {
-    name: "email",
-    label: "Email",
-    icon: <FaEnvelope />,
-  },
-  {
-    name: "password",
-    label: "Password",
-    icon: <FaLock />,
-  },
-];
-
 function LoginPage() {
   const { register, handleSubmit } = useForm<IFormInput>();
+  const [isLoading, setIsLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
 
   const { state } = useLocation();
   const navigate = useNavigate();
   const { dispatch } = useContext(AppContext);
 
-  const { mutate, isLoading, isError } = useMutation(
-    "login",
-    async (formData: IFormInput) => {
+  const loginMutation = async (formData: IFormInput) => {
+    setIsLoading(true);
+    try {
       const response = await https.post<ILoginResponse>("/login", formData);
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        dispatch({
-          type: Types.login,
-          payload: data,
-        });
-        const role = data.tokenUser.role;
-        return navigate(`/${role}`, {
-          replace: true,
-        });
-      },
-      onError: (error: CustomError) => {
+      const data = response.data;
+      dispatch({
+        type: Types.login,
+        payload: data,
+      });
+      const role = data.tokenUser.role;
+      return navigate(`/${role}`, {
+        replace: true,
+      });
+    } catch (error) {
+      error instanceof Error &&
         dispatch({
           type: Types.open,
           payload: {
@@ -73,15 +58,13 @@ function LoginPage() {
             type: "Error",
           },
         });
-        throw error;
-      },
-
-      // useErrorBoundary: true,
+    } finally {
+      setIsLoading(false);
     }
-  );
+  };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    mutate(data);
+    loginMutation(data);
   };
 
   //return
@@ -95,7 +78,7 @@ function LoginPage() {
       </span>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {formFields.map(({ name, label, icon }) => (
+        {loginFormFields.map(({ name, label, icon }) => (
           <div key={name} className="relative">
             <div className="mb-2 block ">
               <Label htmlFor={name}>{label}</Label>
@@ -131,8 +114,8 @@ function LoginPage() {
           gradientDuoTone={"greenToBlue"}
           className="w-full"
           type="submit"
-          disabled={isError || isLoading}
-          isProcessing={isError || isLoading}
+          disabled={isLoading}
+          isProcessing={isLoading}
         >
           Submit
         </Button>

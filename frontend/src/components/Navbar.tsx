@@ -22,7 +22,7 @@ const navLinks = [
   },
   {
     name: "Staff",
-    link: "/Staff",
+    link: "/staff",
   },
 ];
 
