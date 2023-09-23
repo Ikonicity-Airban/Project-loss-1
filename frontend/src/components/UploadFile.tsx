@@ -35,11 +35,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
   return (
     <div className="flex items-center gap-4 ring-1 rounded-xl text-center">
       <Label htmlFor="upload" className="h-full p-2 cursor-pointer w-full">
-        {selectedFile?.name || "Click to choose a pdf file"}
+        {selectedFile?.name || "Click to choose a file"}
       </Label>
       <FileInput
         {...props}
         name="file"
+        max={1000}
         id="upload"
         className="outline-none hidden"
         accept={acceptType || "application/pdf"}

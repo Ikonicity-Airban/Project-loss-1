@@ -14,7 +14,6 @@ import { AppContext } from "../../api/context";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
-import { TypeEditInfo } from "@inovua/reactdatagrid-community/types";
 import { Types } from "../../api/reducer";
 import { toast } from "react-hot-toast";
 import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
@@ -31,10 +30,6 @@ const CoursePage = () => {
     courses: ICourse[];
   }> => {
     const response = await http.get(`/courses`);
-    console.log(
-      "🚀 ~ file: courses.tsx:35 ~ fetchCourses ~ response:",
-      response
-    );
     return response.data;
   };
   const fetchInstructors = async (): Promise<{
@@ -63,22 +58,32 @@ const CoursePage = () => {
     instructors: IInstructor[];
   }>("instructor", fetchInstructors);
 
-  const { data: courses } = useQuery<{ count: number; courses: ICourse[] }>(
-    "courses",
-    fetchCourses
-  );
+  const { data: courses, refetch } = useQuery<{
+    count: number;
+    courses: ICourse[];
+  }>("courses", fetchCourses);
 
   const createMutation = useMutation("courses", createCourse, {
     onSuccess: () => {
-      toast.success("Created successfully");
+      dispatch({
+        type: Types.close,
+        payload: null,
+      });
+      refetch();
       reset();
+      toast.success("Updated successfully");
     },
   });
 
   const updateMutation = useMutation("courses", updateCourse, {
     onSuccess: () => {
-      toast.success("Updated successfully");
+      dispatch({
+        type: Types.close,
+        payload: null,
+      });
       reset();
+      toast.success("Updated successfully");
+      refetch();
     },
   });
 
@@ -89,14 +94,18 @@ const CoursePage = () => {
   });
 
   const onSubmit = (data: ICourse) => {
-    console.log("🚀 ~ file: courses.tsx:88 ~ onSubmit ~ data:", data);
     if (data._id) {
       updateMutation.mutate(data);
     } else {
       createMutation.mutate(data);
     }
     // reset();
+    dispatch({
+      type: Types.close,
+      payload: null,
+    });
   };
+
   const handleEdit = (course) => {
     dispatch({
       type: Types.open,
@@ -109,11 +118,11 @@ const CoursePage = () => {
     reset(course);
   };
 
-  function handleTableEdit(editInfo: TypeEditInfo) {
-    console.log(
-      "🚀 ~ file: courses.tsx:78 ~ handleTableEdit ~ editInfo:",
-      editInfo
-    );
+  function handleTableEdit(editInfo) {
+    updateMutation.mutate({
+      ...editInfo?.data,
+      [editInfo.columnId]: editInfo.value,
+    });
   }
 
   const handleDelete = (id: string) => {
@@ -130,8 +139,11 @@ const CoursePage = () => {
       defaultWidth: 100,
       render: ({ data }) => (
         <div className="flex items-center gap-4 justify-around p-2">
-          <FaPen onClick={() => handleEdit(data)} />
-          <FaTrash onClick={() => handleDelete(data.id)} />
+          <FaPen onClick={() => handleEdit(data)} className="cursor-pointer" />
+          <FaTrash
+            onClick={() => handleDelete(data._id)}
+            className="cursor-pointer"
+          />
         </div>
       ),
     },
@@ -143,7 +155,7 @@ const CoursePage = () => {
       className="max-w-screen-tablet w-full mx-auto text-left"
     >
       <div className="space-y-6">
-        <input type="hidden" {...register("_id")} />
+        {/* <input type="hidden" {...register("_id")} /> */}
 
         <div>
           <Label>Course Title</Label>
@@ -154,7 +166,8 @@ const CoursePage = () => {
           <Label>Course Code</Label>
           <TextInput
             type="text"
-            {...register("code", { required: true, maxLength: 3 })}
+            maxLength={3}
+            {...register("code", { required: true })}
           />
         </div>
         <div>

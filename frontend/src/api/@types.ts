@@ -15,11 +15,12 @@ type IUser = {
 
 export type IStudent = {
   userId?: IUser;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   coursesOffered?: ICourse[];
-  level?: number | 100 | 200 | 300 | 400;
+  level: number | 100 | 200 | 300 | 400;
   reg_no?: string;
+  photoURL?: string;
   sex?: "male" | "female";
   mobile_phone?: string;
   contact_address?: string;
@@ -41,7 +42,7 @@ export type ICourse = {
   code: string;
   description?: string;
   department?: IDepartment["name"];
-  instructor?: string;
+  instructor?: IInstructor;
 } & dataResponse;
 
 export type IDepartment = {
@@ -60,16 +61,17 @@ export type IAssignment = {
   level: 100 | 200 | 300 | 400;
   description: string;
   submission: string;
-  course: ICourse["title"];
+  course: ICourse;
 } & dataResponse;
 
 export type IInstructor = {
-  // id: string
   userId?: IUser;
-  firstName?: string;
-  lastName?: string;
+  title?: string;
+  firstName: string;
+  lastName: string;
+  photoURL?: string;
   courseTeaching?: ICourse;
-  assignment: IAssignment[];
+  assignment?: IAssignment[];
   department?: IDepartment["name"];
 } & dataResponse;
 
@@ -102,4 +104,12 @@ export type IResult = {
   student: IStudent;
   courses: ICourse[];
   level: 100 | 200 | 300 | 400;
+} & dataResponse;
+
+export type IEvent = {
+  instructor: IInstructor;
+  title: string;
+  date?: Date;
+  content: string;
+  type: "news" | "event";
 } & dataResponse;

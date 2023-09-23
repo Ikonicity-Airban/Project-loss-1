@@ -14,10 +14,6 @@ async function GetAllInstructors(req, res) {
     .populate("courseTeaching", "-createdAt -updatedAt")
     .populate("userId", "-createdAt -updatedAt -__v")
     .lean();
-  console.log(
-    "🚀 ~ file: instructor.controller.js:16 ~ GetAllInstructors ~ instructors:",
-    instructors
-  );
   res.status(StatusCodes.OK).json({ instructors, count: instructors.length });
 }
 
@@ -39,7 +35,8 @@ async function GetInstructorProfile(req, res) {
     throw new UnauthenticatedError("You are not authorized");
 
   const instructor = await Instructor.findOne({ userId })
-    .populate("userId")
+    .populate("courseTeaching", "-createdAt -updatedAt")
+    .populate("userId", "-createdAt -updatedAt -__v")
     .lean();
   if (!instructor) throw new NotFoundError("instructor Not found");
   res.status(StatusCodes.OK).json(instructor);

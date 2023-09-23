@@ -2,9 +2,11 @@ const { Schema, model } = require("mongoose");
 
 const EventsSchema = new Schema(
   {
-    title: { type: [String, "No title provided"], required: true },
+    title: { type: String, required: true },
     content: String,
-    coordinator: { type: Schema.Types.ObjectId, ref: "Instructor" },
+    date: Date,
+    type: { type: String, enum: ["news", "event"] },
+    instructor: { type: String },
   },
   {
     timestamps: true,

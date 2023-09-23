@@ -1,3 +1,5 @@
+import { ICourse, IInstructor } from "../@types";
+
 import { Button } from "flowbite-react";
 import { FaDownload } from "react-icons/fa";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
@@ -38,38 +40,47 @@ export const courseColumns: TypeColumns = [
 ];
 
 export const assignmentColumns: TypeColumns = [
+  // { name: "_id", header: "ID", defaultWidth: 80, defaultFlex: 1 },
+  { name: "title", header: "Title", defaultFlex: 1 },
+  { name: "description", header: "Description", defaultFlex: 1 },
   {
-    name: "_id",
-    header: "Id",
+    name: "course",
+    editable: false,
+    header: "Course",
     defaultFlex: 1,
+    render: ({ value }: { value: ICourse }) => (
+      <span>
+        {value.title} - {value.code}
+      </span>
+    ),
   },
-  { name: "title", defaultFlex: 1, header: "Title" },
   {
+    name: "instructor",
+    editable: false,
+    header: "Course Instructor",
+
     defaultFlex: 1,
-    name: "description",
-    header: "Description",
-    // render: ({ value }) => (flags[value] ? flags[value] : value),
+    render: ({ value }: { value: IInstructor }) => (
+      <span>
+        {value.lastName} - {value.firstName}
+      </span>
+    ),
   },
-  { name: "course", defaultFlex: 1, header: "Course" },
   {
     name: "file",
     header: "File",
-    render: ({ value }) => {
-      const [fullMatch, mimeType, base64Data] = value.match(
-        /^data:(.+);base64,(.+)$/
-      );
-      let fileName = "assignment.pdf";
+    editable: false,
 
-      const nameRegex = /filename=([^;]*)/;
-      const nameMatch = mimeType.match(nameRegex);
-      if (nameMatch && nameMatch.length > 1) {
-        fullMatch && base64Data;
-        fileName = nameMatch[1];
-      }
+    render: (value) => {
+      const fileName = `${value.data.course.code} ${value.data.title}`;
 
       return (
         <center>
-          <a href={value} download={fileName}>
+          <a
+            href={value.data.file}
+            download={fileName}
+            className="cursor-pointer"
+          >
             <FaDownload />
           </a>
         </center>

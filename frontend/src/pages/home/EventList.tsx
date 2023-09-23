@@ -1,40 +1,33 @@
-import { useEffect, useState } from "react";
-
 import { Card } from "flowbite-react";
-import https from "../../api/https";
+import { IEvent } from "../../api/@types";
+import Section from "../../components/Section";
 
-type IEvent = {
-  title: string;
-  content: string;
+type Props = {
+  events?: IEvent[];
 };
-function EventList() {
-  const [events, setEvents] = useState<IEvent[]>();
-
-  const fetchAssignment = async () => await https.get("/events");
-
-  useEffect(() => {
-    fetchAssignment().then((res) => {
-      setEvents(res.data);
-    });
-  }, []);
-
+function EventList({ events }: Props) {
   return (
-    <main>
-      {events ? (
-        events?.map((event) => (
-          <div>
-            <Card>
-              <h2>{event.title}</h2>
-              <p>{event.content}</p>
+    <Section title="Latest Events">
+      <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-4 place-content-center">
+        {events ? (
+          events?.map((event) => (
+            <Card key={event._id}>
+              <h3 className="text-lg font-bold mb-2 logo-clipped">
+                {event.title}
+              </h3>
+              <p className="text-xs text-gray-400">
+                {new Date(event.date || "").toDateString()}
+              </p>
+              <p className="">{event.content.slice(0, 150)}</p>
             </Card>
-          </div>
-        ))
-      ) : (
-        <Card className="m-6">
-          <center>No new event for now</center>
-        </Card>
-      )}
-    </main>
+          ))
+        ) : (
+          <Card className="m-6">
+            <center>No new event for now</center>
+          </Card>
+        )}
+      </div>
+    </Section>
   );
 }
 

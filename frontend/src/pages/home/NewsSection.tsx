@@ -1,45 +1,24 @@
 import { Card } from "flowbite-react";
+import { IEvent } from "../../api/@types";
 
-const NewsSection = () => {
+interface Props {
+  news?: IEvent[];
+}
+const NewsSection = ({ news }: Props) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
-      <Card>
-        <h3 className="text-lg font-bold mb-2 logo-clipped">
-          Tech Conference 2023
-        </h3>
-        <p className="">October 10-12, 2023</p>
-        <p className="">
-          Join us for the annual Tech Conference, where industry experts and
-          researchers will share insights and advancements in the field of
-          computer science. Explore emerging technologies and network with
-          professionals from leading companies.
-        </p>
-      </Card>
-      <Card>
-        <h3 className="text-lg font-bold mb-2 logo-clipped">
-          Tech Conference 2023
-        </h3>
-        <p className="">October 10-12, 2023</p>
-        <p className="">
-          Join us for the annual Tech Conference, where industry experts and
-          researchers will share insights and advancements in the field of
-          computer science. Explore emerging technologies and network with
-          professionals from leading companies.
-        </p>
-      </Card>
-      <Card>
-        <h3 className="text-lg font-bold mb-2 logo-clipped">
-          Tech Conference 2023
-        </h3>
-        <p className="">October 10-12, 2023</p>
-        <p className="">
-          Join us for the annual Tech Conference, where industry experts and
-          researchers will share insights and advancements in the field of
-          computer science. Explore emerging technologies and network with
-          professionals from leading companies.
-        </p>
-      </Card>
-      {/* Add more event cards here */}
+      {news &&
+        news.map((item) => (
+          <Card key={item._id}>
+            <h3 className="text-lg font-bold mb-2 logo-clipped">
+              {item.title}
+            </h3>
+            <p className="text-xs text-gray-400">
+              {new Date(item.date || "").toDateString()}
+            </p>
+            <p className="">{item.content}</p>
+          </Card>
+        ))}
     </div>
   );
 };

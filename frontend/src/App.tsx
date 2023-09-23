@@ -6,6 +6,7 @@ import { FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
 import { AppContext } from "./api/context";
 import { Outlet } from "react-router-dom";
 import React from "react";
+import { Toaster } from "react-hot-toast";
 import { Types } from "./api/reducer";
 
 function App() {
@@ -17,13 +18,7 @@ function App() {
   function closeModal() {
     dispatch({
       type: Types.close,
-      payload: {
-        ...modal,
-        content: "",
-        type: "Success",
-        buttonOK: "OK",
-        show: false,
-      },
+      payload: null,
     });
   }
 
@@ -34,6 +29,7 @@ function App() {
 
   return (
     <section className="w-[99vw] dark:bg-slate-950 3xl:container mx-auto">
+      <Toaster />
       <Modal size="xl" show={modal?.show} dismissible onClose={closeModal}>
         <Modal.Header className="text-sm">{modal.header}</Modal.Header>
         <Modal.Body
@@ -63,7 +59,13 @@ function App() {
             <Button
               size="sm"
               color={modal.type == "Error" ? "failure" : "success"}
-              onClick={() => onOk(modal.onOk)}
+              onClick={() => {
+                onOk(modal.onOk);
+                dispatch({
+                  type: Types.close,
+                  payload: null,
+                });
+              }}
             >
               {modal.buttonOK}
             </Button>

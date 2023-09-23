@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { randomUUID } = require("node:crypto");
-const Department = require("./department.model");
-const User = require("./user.model").default;
+const User = require("./user.model");
 
 const StudentSchema = new Schema(
   {
@@ -10,7 +9,7 @@ const StudentSchema = new Schema(
       ref: "User",
     },
 
-    student_passport: Buffer,
+    photoURL: String,
     firstName: String,
     lastName: String,
     reg_no: {

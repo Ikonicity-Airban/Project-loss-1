@@ -6,21 +6,14 @@ import {
   TextInput,
   Textarea,
 } from "flowbite-react";
-import {
-  FaBook,
-  FaDownload,
-  FaGraduationCap,
-  FaPen,
-  FaPlus,
-  FaTrash,
-} from "react-icons/fa";
-import { IAssignment, ICourse, IInstructor } from "../../api/@types";
+import { FaPen, FaPlus, FaTrash } from "react-icons/fa";
 import { Types, defaultInstructor } from "../../api/reducer";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useMutation, useQuery } from "react-query";
 
 import { AppContext } from "../../api/context";
-import FileUpload from "../../components/UploadFile";
+import EventList from "../home/EventList";
+import { IEvent } from "../../api/@types";
 import ReactDataGrid from "@inovua/reactdatagrid-community";
 import Section from "../../components/Section";
 import { TypeColumns } from "@inovua/reactdatagrid-community/types/TypeColumn";
@@ -29,46 +22,45 @@ import useAxiosPrivate from "../../api/hooks/useAxiosPrivate";
 import { useForm } from "react-hook-form";
 import useLocalStorage from "../../api/hooks/useLocalStorage";
 
-function InstructorAssignmentPage() {
+function AdminEventPage() {
   const http = useAxiosPrivate();
-  const { handleSubmit, register, reset } = useForm<IAssignment>();
-  const { dispatch } = useContext(AppContext);
+  const { handleSubmit, register, reset } = useForm<IEvent>();
   const [instructor] = useLocalStorage("instructor", defaultInstructor);
-  const [file, setFile] = useState<string>("");
+  const { dispatch } = useContext(AppContext);
+
   useEffect(() => {
     reset();
   }, [dispatch, reset]);
 
-  const fetchAssignment = async (): Promise<{
+  const fetchEvent = async (): Promise<{
     count: number;
-    assignments: IAssignment[];
+    events: IEvent[];
   }> => {
-    const response = await http.get(`/assignments`);
+    const response = await http.get(`/events`);
     return response.data;
   };
 
-  const createAssignment = async (data: IAssignment): Promise<IAssignment> => {
-    const response = await http.post<IAssignment>(`/assignments`, data);
+  const createEvent = async (data: IEvent): Promise<IEvent> => {
+    const response = await http.post<IEvent>(`/events`, data);
     return response.data;
   };
 
-  const updateAssignment = async (data: IAssignment): Promise<IAssignment> => {
-    const response = await http.patch<IAssignment>(
-      `/assignments/${data._id}`,
-      data
-    );
+  const updateEvent = async (data: IEvent): Promise<IEvent> => {
+    const response = await http.patch<IEvent>(`/events/${data._id}`, data);
     return response.data;
   };
 
-  const deleteAssignment = async (id: string): Promise<void> => {
-    await http.delete(`/assignments/${id}`);
+  const deleteEvent = async (id: string): Promise<void> => {
+    await http.delete(`/events/${id}`);
   };
 
   const { data, isLoading, refetch } = useQuery<{
     count: number;
-    assignments: IAssignment[];
-  }>("assignments", fetchAssignment);
-  const createMutation = useMutation("assignments", createAssignment, {
+    events: IEvent[];
+  }>("events", fetchEvent);
+
+  console.log("🚀 ~ file: event.tsx:48 ~ AdminEventPage ~ data:", data);
+  const createMutation = useMutation("events", createEvent, {
     onSuccess: () => {
       dispatch({
         type: Types.close,
@@ -80,7 +72,7 @@ function InstructorAssignmentPage() {
     },
   });
 
-  const updateMutation = useMutation("assignments", updateAssignment, {
+  const updateMutation = useMutation("events", updateEvent, {
     onSuccess: () => {
       dispatch({
         type: Types.close,
@@ -92,7 +84,7 @@ function InstructorAssignmentPage() {
     },
   });
 
-  const deleteMutation = useMutation(deleteAssignment, {
+  const deleteMutation = useMutation(deleteEvent, {
     onSuccess: () => {
       toast.success("Deleted successfully");
       refetch();
@@ -100,29 +92,24 @@ function InstructorAssignmentPage() {
   });
 
   const onSubmit = (data) => {
-    console.log(file, data);
-
-    const assignment = {
-      ...data,
-      file,
-      course: instructor.courseTeaching?._id,
-      instructor: instructor._id || "",
-    };
-    if (assignment._id) {
-      updateMutation.mutate(assignment);
+    console.log("🚀 ~ file: event.tsx:84 ~ onSubmit ~ data:", data);
+    if (data._id) {
+      updateMutation.mutate({
+        ...data,
+        instructor: `${instructor.lastName} ${instructor.firstName}`,
+      });
     } else {
-      delete assignment?._id;
-      createMutation.mutate(assignment);
-      setFile("");
+      delete data?._id;
+      createMutation.mutate(data);
     }
   };
 
-  const handleEdit = (course: IAssignment) => {
+  const handleEdit = (course: IEvent) => {
     reset(course);
     dispatch({
       type: Types.open,
       payload: {
-        header: "Update an assignment",
+        header: "Update an event",
         buttonOK: "Submit",
         content: <RegisterForm />,
       },
@@ -134,7 +121,7 @@ function InstructorAssignmentPage() {
     dispatch({
       type: Types.open,
       payload: {
-        header: "Create an assignment",
+        header: "Create an event",
         buttonOK: "Submit",
         content: <RegisterForm />,
       },
@@ -146,9 +133,9 @@ function InstructorAssignmentPage() {
       type: Types.open,
       payload: {
         type: "Error",
-        header: "Delete assignment",
+        header: "Delete event",
         buttonOK: "OK",
-        content: <p>Do you want to delete this assignment</p>,
+        content: <p>Do you want to delete this event</p>,
         onOk: () => deleteMutation.mutate(id),
       },
     });
@@ -157,54 +144,26 @@ function InstructorAssignmentPage() {
   const columns: TypeColumns = [
     // { name: "_id", header: "ID", defaultWidth: 80, defaultFlex: 1 },
     { name: "title", header: "Title", defaultFlex: 1 },
-    { name: "description", header: "Description", defaultFlex: 1 },
+    { name: "content", header: "Content", defaultFlex: 1 },
+    { name: "type", header: "Type", defaultFlex: 1, editable: false },
     {
-      name: "course",
+      name: "date",
+      header: "Date Published",
       editable: false,
-      header: "Course",
       defaultFlex: 1,
-      render: ({ value }: { value: ICourse }) => (
-        <span>
-          {value.title} - {value.code}
-        </span>
-      ),
+      render: ({ value }) => <>{new Date(value).toUTCString()}</>,
     },
     {
       name: "instructor",
+      header: "By",
       editable: false,
-      header: "Course Instructor",
-
       defaultFlex: 1,
-      render: ({ value }: { value: IInstructor }) => (
-        <span>
-          {value.lastName} - {value.firstName}
-        </span>
-      ),
+      render: ({ value }) => <>{value}</>,
     },
-    {
-      name: "file",
-      header: "File",
-      editable: false,
 
-      render: (value) => {
-        const fileName = `${value.data.course.code} ${value.data.title}`;
-
-        return (
-          <center>
-            <a
-              href={value.data.file}
-              download={fileName}
-              className="cursor-pointer"
-            >
-              <FaDownload />
-            </a>
-          </center>
-        );
-      },
-    },
     {
       name: "actions",
-      header: "actions",
+      header: "Actions",
       editable: false,
       defaultWidth: 100,
       render: ({ data }) => (
@@ -217,7 +176,10 @@ function InstructorAssignmentPage() {
   ];
 
   function handleTableEdit(editInfo) {
-    delete editInfo.data.file;
+    console.log(
+      "🚀 ~ file: event.tsx:151 ~ handleTableEdit ~ editInfo:",
+      editInfo
+    );
     updateMutation.mutate({
       ...editInfo?.data,
       [editInfo.columnId]: editInfo.value,
@@ -230,11 +192,8 @@ function InstructorAssignmentPage() {
         <TextInput type="hidden" {...register("_id")} />
         <div className="relative w-full ">
           <div className="mb-2 block ">
-            <Label htmlFor="">Assignment Title</Label>
+            <Label htmlFor="">Event Title</Label>
           </div>
-          <span className="absolute z-10 right-4 bottom-[20%] text-gray-500">
-            <FaBook></FaBook>
-          </span>
           <TextInput
             required
             className="placeholder:capitalize placeholder:mx-10"
@@ -245,51 +204,30 @@ function InstructorAssignmentPage() {
         </div>
         <div className="relative w-full ">
           <div className="mb-2 block ">
-            <Label htmlFor="">Assignment Description</Label>
+            <Label htmlFor="">Event content</Label>
           </div>
           <Textarea
             required
             className="placeholder:capitalize placeholder:mx-10 h-28"
             id="ass_title"
             // placeholder={label}
-            {...register("description")}
+            {...register("content")}
           />
         </div>
         <div className="relative w-full ">
-          <Select
-            defaultValue={100}
-            required
-            placeholder="select a level"
-            {...register("level")}
-          >
-            <option disabled>Select a level</option>
-            {[100, 200, 300, 400].map((level) => (
-              <option value={level} key={level}>
-                {level}
-              </option>
-            ))}
-          </Select>
-        </div>
-        <div className="w-full ">
           <div className="mb-2 block ">
-            <Label htmlFor="course">Course</Label>
+            <Label htmlFor="type">Notification Type</Label>
           </div>
-          <TextInput
-            icon={FaGraduationCap}
+          <Select
             required
-            disabled
-            placeholder={
-              instructor.courseTeaching?.title +
-                " - " +
-                instructor.courseTeaching?.code || "No course"
-            }
-            className="placeholder:capitalize placeholder:mx-10"
-            id="course"
+            className="placeholder:capitalize placeholder:mx-10 h-28"
+            id="type"
             // placeholder={label}
-          />
-        </div>
-        <div className="relative w-full ">
-          <FileUpload setFile={setFile} />
+            {...register("type")}
+          >
+            <option value="news">News</option>
+            <option value="event">Event</option>
+          </Select>
         </div>
       </div>
       <div className="relative w-full my-6">
@@ -299,21 +237,22 @@ function InstructorAssignmentPage() {
           isProcessing={createMutation.isLoading || updateMutation.isLoading}
           gradientDuoTone="greenToBlue"
         >
-          Upload Assignment
+          Upload Event
         </Button>
       </div>
     </form>
   );
   return (
     <main className="my-10">
+      <EventList events={data?.events} />
       <ListGroup>
-        <Section subtitle="All assignments">
+        <Section subtitle="Events" title="Create, Edit, Delete Events">
           <Button onClick={handleCreate} gradientDuoTone="greenToBlue">
-            <FaPlus className="mr-4" /> Add a new assignment
+            <FaPlus className="mr-4" /> Add a new event
           </Button>
           <ReactDataGrid
             idProperty="id"
-            dataSource={data?.assignments || []}
+            dataSource={data?.events || []}
             columns={columns}
             loading={isLoading}
             onEditComplete={handleTableEdit}
@@ -329,4 +268,4 @@ function InstructorAssignmentPage() {
     </main>
   );
 }
-export default InstructorAssignmentPage;
+export default AdminEventPage;

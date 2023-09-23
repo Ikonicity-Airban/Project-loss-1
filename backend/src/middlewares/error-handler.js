@@ -32,7 +32,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 
   console.error(
     "🚀 ~ file: error-handler.js:32 ~ errorHandlerMiddleware ~ error:",
-    err
+    customError.msg
   );
 
   return res.status(customError.statusCode).json({ msg: customError.msg });

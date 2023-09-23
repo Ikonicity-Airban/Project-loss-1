@@ -3,18 +3,23 @@ import {
   InstructorLayout,
   StudentLayout,
 } from "./layouts/DashboardLayout";
+import { InstructorsPage, StudentsPage } from "./pages/admin/users";
 import { LoginLayout, SignUpLayout } from "./layouts/AuthLayout";
 
 import AboutPage from "./about";
-import AdminDashboard from "./pages/admin/Dashboard";
+import AdminAssignmentPage from "./pages/admin/assignment";
+import AdminDashboard from "./pages/admin/dashboard";
+import AdminEventPage from "./pages/admin/event";
 import App from "./App";
 import AssignmentPage from "./pages/student/assignment";
 import ContactPage from "./contact";
 import CoursePage from "./pages/admin/courses";
 import ErrorPage from "./pages/error";
+import EventPage from "./pages/instructor/event";
 import { HomePage } from "./components";
 import InstructorAssignmentPage from "./pages/instructor/assignment";
 import InstructorDashboard from "./pages/instructor/Dashboard";
+import InstructorProfilePage from "./pages/instructor/profile";
 import MainLayout from "./layouts/MainLayout";
 import NewsPage from "./pages/news";
 import ResultPage from "./pages/student/result";
@@ -124,7 +129,11 @@ const router = createBrowserRouter([
           },
           {
             path: "events",
-            element: <AssignmentPage />,
+            element: <EventPage />,
+          },
+          {
+            path: "my-profile",
+            element: <InstructorProfilePage />,
           },
         ],
       },
@@ -133,18 +142,12 @@ const router = createBrowserRouter([
         element: <AdminLayout />,
         errorElement: <ErrorPage />,
         children: [
-          {
-            path: "",
-            element: <AdminDashboard />,
-          },
-          {
-            path: "courses",
-            element: <CoursePage />,
-          },
-          {
-            path: "assignments",
-            element: <div>All Assignments</div>,
-          },
+          { path: "", element: <AdminDashboard /> },
+          { path: "assignment", element: <AdminAssignmentPage /> },
+          { path: "events", element: <AdminEventPage /> },
+          { path: "courses", element: <CoursePage /> },
+          { path: "students", element: <StudentsPage /> },
+          { path: "instructors", element: <InstructorsPage /> },
         ],
       },
     ],
