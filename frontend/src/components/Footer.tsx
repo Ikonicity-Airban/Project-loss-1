@@ -35,7 +35,9 @@ export default function FooterComponent() {
               <Footer.LinkGroup col className="text-white text-sm">
                 <Footer.Link href="#">Github</Footer.Link>
                 <Footer.Link href="#">Discord</Footer.Link>
-                <Footer.Link href="#">NACEST campus life</Footer.Link>
+                <Footer.Link href="https://nacest.org//#">
+                  NACEST campus life
+                </Footer.Link>
                 <Footer.Link href="#">Online community</Footer.Link>
                 <Footer.Link href="#">Event</Footer.Link>
               </Footer.LinkGroup>
